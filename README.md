@@ -121,18 +121,48 @@ Used inside `<Template>` via `<Parameter expression="[TOKEN]" />`:
 | `STEP_COUNT`       | int    | `8421`       |
 | `HEART_RATE`       | float  | `61`         |
 
-## Dropping a design in
+## What is implemented
 
-`res/raw/watchface.xml` currently holds a placeholder face (date, time,
-battery) whose only job is to prove the build and sideload path. Replace the
-contents of `<Scene>` with the real design:
+`res/raw/watchface.xml` is **Layout A "Instrument"**, Swiss palette, Archivo numerals,
+built from `HANDOFF-watchface.md`. Design space 480 x 480.
 
-- flat art → PNG/WebP in `res/drawable/`, drawn with `<PartImage>`
-- custom type → `.ttf`/`.otf` in `res/font/`, referenced as
-  `<Font family="filename-without-extension" …>`
-- always-on display → add `<Variant mode="AMBIENT" …>` to the elements that
-  must dim or hide
-- regenerate `preview.png` so the picker thumbnail matches the face
+| HANDOFF | Implemented as |
+| --- | --- |
+| Minute / hour tracks | `track_minute.png` / `track_hour.png` alpha masks, tinted per token |
+| 12 index, seconds dot | `PartDraw` Rectangle / Ellipse; dot steps via `Transform [SECOND] * 6` |
+| Slot 0 day / date | `PartText` + `Upper`, `[DAY_OF_WEEK_F] [DAY]`, taps to CALENDAR |
+| Time | two `TimeText` (`hh`, `mm`) + a separate dim colon `PartText` |
+| Slot 2 / 3 arcs | `Arc` r 196 stroke 8, `endAngle` transformed by `[STEP_PERCENT]` / `[BATTERY_PERCENT]` |
+| Slot 2 / 3 readouts | `TextCircular` r 176, label and value as two `Font` runs on one arc |
+| Slot 4 / 5 rim | `ComplicationSlot` SHORT_TEXT, `TextCircular` r 198 at 315 / 45 deg |
+| Slot 1 forecast | native `[WEATHER.HOURS.1..3]`, condition code mapped to 4 two-layer glyphs |
+| Slot 6 minor row | `ComplicationSlot` SHORT_TEXT, TITLE + TEXT |
+| Slot 7 icon tile | `RoundRectangle` border + tinted `tile_wallet` glyph |
+| Charging / low power | `Condition` on `[BATTERY_CHARGING_STATUS]` / `[BATTERY_IS_LOW]` |
+| Always-on | paired `Group`s with `Variant mode="AMBIENT" target="alpha"` |
+
+Angles follow the WFF convention, 0 degrees = 12 o'clock clockwise. That is the same
+convention HANDOFF uses: a 60 degree sweep from 240 is centred on 9 o'clock, and from
+60 on 3 o'clock, exactly as its arc readout rows state.
+
+## Where HANDOFF and the platform disagree
+
+Four items in `HANDOFF-watchface.md` section 1 and 6-7 do not match Watch Face Format.
+The platform behaviour was followed in each case:
+
+| HANDOFF says | Platform | What was built |
+| --- | --- | --- |
+| `min SDK 33` with format version 2 | WFF 2 needs Wear OS 5 = API 34 | `minSdk 34` |
+| manifest declares a `WatchFaceService` | WFF is resource-only | `hasCode="false"`, no service |
+| fonts in `assets/fonts/` | WFF reads `res/font/` | `res/font/*.ttf` |
+| "no arc-text primitive", use Watch Face Studio | `TextCircular` draws text on an arc | pure WFF, no WFS |
+| "no standard WFF forecast data source" | WFF 2 has 8 h hourly weather | native `[WEATHER.HOURS.*]` |
+
+## Regenerating the assets
+
+```bash
+python3 tools/render_preview.py      # preview.png from the Layout A geometry
+```
 
 ## Alternative: Watch Face Studio
 
