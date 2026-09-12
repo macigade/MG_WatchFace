@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Instrument 480</string>
+
+    <!-- watch face editor: layout selector -->
+    <string name="cfg_layout">Layout</string>
+    <string name="cfg_layout_a">Instrument</string>
+    <string name="cfg_layout_c">Orbit</string>
 </resources>

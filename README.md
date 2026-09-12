@@ -123,27 +123,33 @@ Used inside `<Template>` via `<Parameter expression="[TOKEN]" />`:
 
 ## What is implemented
 
-`res/raw/watchface.xml` is **Layout A "Instrument"**, Swiss palette, Archivo numerals,
-built from `HANDOFF-watchface.md`. Design space 480 x 480.
+Both layouts from `HANDOFF-watchface.md`, selectable in the watch face editor
+under **Layout** (`ListConfiguration id="layout"`, default **Instrument**):
 
-| HANDOFF | Implemented as |
-| --- | --- |
-| Minute / hour tracks | `track_minute.png` / `track_hour.png` alpha masks, tinted per token |
-| 12 index, seconds dot | `PartDraw` Rectangle / Ellipse; dot steps via `Transform [SECOND] * 6` |
-| Slot 0 day / date | `PartText` + `Upper`, `[DAY_OF_WEEK_F] [DAY]`, taps to CALENDAR |
-| Time | two `TimeText` (`hh`, `mm`) + a separate dim colon `PartText` |
-| Slot 2 / 3 arcs | `Arc` r 196 stroke 8, `endAngle` transformed by `[STEP_PERCENT]` / `[BATTERY_PERCENT]` |
-| Slot 2 / 3 readouts | `TextCircular` r 176, label and value as two `Font` runs on one arc |
-| Slot 4 / 5 rim | `ComplicationSlot` SHORT_TEXT, `TextCircular` r 198 at 315 / 45 deg |
-| Slot 1 forecast | native `[WEATHER.HOURS.1..3]`, condition code mapped to 4 two-layer glyphs |
-| Slot 6 minor row | `ComplicationSlot` SHORT_TEXT, TITLE + TEXT |
-| Slot 7 icon tile | `RoundRectangle` border + tinted `tile_wallet` glyph |
-| Charging / low power | `Condition` on `[BATTERY_CHARGING_STATUS]` / `[BATTERY_IS_LOW]` |
-| Always-on | paired `Group`s with `Variant mode="AMBIENT" target="alpha"` |
+| | Layout A "Instrument" | Layout C "Orbit" |
+| --- | --- | --- |
+| Time | y 118, 100 px | y 162, 96 px |
+| Day / date | y 64, 23 px | y 130, 21 px |
+| Steps | arc r 192-200 from 240 deg + curved readout r 176 | rim r 198 at 315 deg |
+| Battery | arc r 192-200 from 60 deg + curved readout r 176 | rim r 198 at 45 deg |
+| Alarm / timer | rim r 198 at 315 / 45 deg | rim r 198 at 225 / 135 deg, reversed path |
+| Forecast | y 248, icon 26, hour labels | y 284, icon 20, no hour label |
+| Minor row | y 334 | y 326 |
+| Icon tile | y 366 | y 358 |
 
-Angles follow the WFF convention, 0 degrees = 12 o'clock clockwise. That is the same
-convention HANDOFF uses: a 60 degree sweep from 240 is centred on 9 o'clock, and from
-60 on 3 o'clock, exactly as its arc readout rows state.
+Both carry the same complication slot ids (4 alarm, 5 timer, 6 minor row), so
+switching layout keeps every assignment, as section 10 requires.
+
+Shared across both: the chrome from section 2 (tick tracks, 12 index, seconds
+dot stepping 6 deg/s), the charging and low-power status bands, and the
+always-on group. Curved text is `TextCircular`; the forecast reads native
+`[WEATHER.HOURS.1..3]` and maps the condition code onto four two-layer
+tintable glyphs. Tap targets are separate transparent parts, all at least
+44 x 44, so the full-face parts that carry curved text never capture a tap.
+
+Angles follow the WFF convention, 0 degrees = 12 o'clock clockwise. That is the
+same convention HANDOFF uses: a 60 degree sweep from 240 is centred on 9
+o'clock, and from 60 on 3 o'clock, exactly as its arc readout rows state.
 
 ## Where HANDOFF and the platform disagree
 
@@ -161,7 +167,8 @@ The platform behaviour was followed in each case:
 ## Regenerating the assets
 
 ```bash
-python3 tools/render_preview.py      # preview.png from the Layout A geometry
+python3 tools/render_preview.py      # preview.png + the two editor option icons
+python3 tools/verify.py              # 43 structural checks, exits non-zero on failure
 ```
 
 ## Alternative: Watch Face Studio

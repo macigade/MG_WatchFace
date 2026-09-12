@@ -18,453 +18,873 @@
     <Metadata key="PREVIEW_TIME" value="10:08:32" />
     <Metadata key="STEP_GOAL" value="10000" />
 
+    <UserConfigurations>
+        <ListConfiguration id="layout" displayName="cfg_layout"
+                           screenReaderText="cfg_layout" defaultValue="a">
+            <ListOption id="a" displayName="cfg_layout_a"
+                        screenReaderText="cfg_layout_a" icon="opt_layout_a" />
+            <ListOption id="c" displayName="cfg_layout_c"
+                        screenReaderText="cfg_layout_c" icon="opt_layout_c" />
+        </ListConfiguration>
+    </UserConfigurations>
+
     <Scene backgroundColor="#ff0A0A0B">
 
     <!-- ================================================================
-         INTERACTIVE
+         INTERACTIVE - Layout A "Instrument" / Layout C "Orbit", picked in the
+         watch face editor. Both carry the same slot ids, so switching layout
+         keeps every complication assignment (section 10).
          ================================================================ -->
-    <Group name="interactive" x="0" y="0" width="480" height="480" alpha="255">
-        <Variant mode="AMBIENT" target="alpha" value="0" />
+    <ListConfiguration id="layout">
+        <ListOption id="a">
+        <Group name="layout_a" x="0" y="0" width="480" height="480" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
 
-        <!-- ==== fixed chrome (HANDOFF section 2) ==== -->
-        <!-- minute track: r 224-232, 60 marks x 0.5 deg, hour slots omitted -->
-        <PartImage name="track_minute" x="0" y="0" width="480" height="480" tintColor="#ff3E4247">
-            <Image resource="track_minute" />
-        </PartImage>
-        <!-- hour track: r 214-232, 12 marks x 1.4 deg -->
-        <PartImage name="track_hour" x="0" y="0" width="480" height="480" tintColor="#ff6A6E73">
-            <Image resource="track_hour" />
-        </PartImage>
-        <!-- 12 index -->
-        <PartDraw name="index_12" x="0" y="0" width="480" height="480">
-            <Rectangle x="239" y="10" width="2" height="22">
-                <Fill color="#ff4A9EDB" />
-            </Rectangle>
-        </PartDraw>
-        <!-- seconds index: r 222, dia 8, steps 6 deg/s -->
-        <PartDraw name="seconds_dot" x="0" y="0" width="480" height="480"
-                  pivotX="0.5" pivotY="0.5" angle="0">
-            <Transform target="angle" value="[SECOND] * 6" />
-            <Ellipse centerX="240" centerY="18" width="8" height="8">
-                <Fill color="#ff4A9EDB" />
-            </Ellipse>
-        </PartDraw>
+            <!-- ==== fixed chrome (HANDOFF section 2) ==== -->
+            <!-- minute track: r 224-232, 60 marks x 0.5 deg, hour slots omitted -->
+            <PartImage name="track_minute" x="0" y="0" width="480" height="480" tintColor="#ff3E4247">
+                <Image resource="track_minute" />
+            </PartImage>
+            <!-- hour track: r 214-232, 12 marks x 1.4 deg -->
+            <PartImage name="track_hour" x="0" y="0" width="480" height="480" tintColor="#ff6A6E73">
+                <Image resource="track_hour" />
+            </PartImage>
+            <!-- 12 index -->
+            <PartDraw name="index_12" x="0" y="0" width="480" height="480">
+                <Rectangle x="239" y="10" width="2" height="22">
+                    <Fill color="#ff4A9EDB" />
+                </Rectangle>
+            </PartDraw>
+            <!-- seconds index: r 222, dia 8, steps 6 deg/s -->
+            <PartDraw name="seconds_dot" x="0" y="0" width="480" height="480"
+                      pivotX="0.5" pivotY="0.5" angle="0">
+                <Transform target="angle" value="[SECOND] * 6" />
+                <Ellipse centerX="240" centerY="18" width="8" height="8">
+                    <Fill color="#ff4A9EDB" />
+                </Ellipse>
+            </PartDraw>
 
-        <!-- ==== slot 0: top strip, day / date ==== -->
-        <PartText name="slot0_datestrip" x="0" y="64" width="480" height="30">
-            <Text align="CENTER" verticalAlign="CENTER">
-                <Font family="archivo_semibold" size="23" color="#ffF2F2F0" letterSpacing="0.16">
-                    <Upper>
-                        <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
-                    </Upper>
-                </Font>
-            </Text>
-            <Launch target="CALENDAR" />
-        </PartText>
+            <!-- ==== slot 0: top strip, day / date ==== -->
+            <PartText name="slot0_datestrip" x="0" y="64" width="480" height="30">
+                <Text align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="23" color="#ffF2F2F0" letterSpacing="0.16">
+                        <Upper>
+                            <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
+                        </Upper>
+                    </Font>
+                </Text>
+            </PartText>
 
-        <!-- ==== hairline ==== -->
-        <PartDraw name="hairline" x="0" y="0" width="480" height="480">
-            <Rectangle x="166" y="106" width="148" height="1">
-                <Fill color="#ff2A2D31" />
-            </Rectangle>
-        </PartDraw>
+            <!-- ==== hairline ==== -->
+            <PartDraw name="hairline" x="0" y="0" width="480" height="480">
+                <Rectangle x="166" y="106" width="148" height="1">
+                    <Fill color="#ff2A2D31" />
+                </Rectangle>
+            </PartDraw>
 
-        <!-- ==== time: colon-centred so digit width never shifts the block ====
-             Archivo advances are tabular (595-597/1000 em): 'hh' = 115.0 px and
-             the colon 33.5 px at 100 px with -0.04em tracking, so the two digit
-             boxes meet the colon box at x 223 / 257. -->
-        <DigitalClock name="time" x="0" y="118" width="480" height="116">
-            <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
-                      align="END" verticalAlign="CENTER"
-                      x="0" y="0" width="223" height="116">
-                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
-            </TimeText>
-            <TimeText format="mm"
-                      align="START" verticalAlign="CENTER"
-                      x="257" y="0" width="223" height="116">
-                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
-            </TimeText>
-        </DigitalClock>
-        <PartText name="time_colon" x="223" y="118" width="34" height="116">
-            <Text align="CENTER" verticalAlign="CENTER">
-                <Font family="archivo_bold" size="100" color="#ff8C8F93">:</Font>
-            </Text>
-        </PartText>
+            <!-- ==== time: colon-centred so digit width never shifts the block ====
+                 Archivo advances are tabular (595-597/1000 em): 'hh' = 115.0 px and
+                 the colon 33.5 px at 100 px with -0.04em tracking, so the two digit
+                 boxes meet the colon box at x 223 / 257. -->
+            <DigitalClock name="time" x="0" y="118" width="480" height="116">
+                <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
+                          align="END" verticalAlign="CENTER"
+                          x="0" y="0" width="223" height="116">
+                    <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
+                </TimeText>
+                <TimeText format="mm"
+                          align="START" verticalAlign="CENTER"
+                          x="257" y="0" width="223" height="116">
+                    <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
+                </TimeText>
+            </DigitalClock>
+            <PartText name="time_colon" x="223" y="118" width="34" height="116">
+                <Text align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_bold" size="100" color="#ff8C8F93">:</Font>
+                </Text>
+            </PartText>
 
-        <!-- ==== slot 2: steps. arc r 192-200, 60 deg sweep from 240 ==== -->
-        <PartDraw name="slot2_arc" x="0" y="0" width="480" height="480">
-            <Arc centerX="240" centerY="240" width="392" height="392"
-                 startAngle="240" endAngle="300" direction="CLOCKWISE">
-                <Stroke color="#ff2A2D31" width="8" />
-            </Arc>
-            <Arc centerX="240" centerY="240" width="392" height="392"
-                 startAngle="240" endAngle="240" direction="CLOCKWISE">
-                <Transform target="endAngle" value="240 + 60 * [STEP_PERCENT] / 100" />
-                <Stroke color="#ff4A9EDB" width="8" />
-            </Arc>
-        </PartDraw>
-        <PartText name="slot2_readout" x="0" y="0" width="480" height="480">
-            <TextCircular centerX="240" centerY="240" width="352" height="352"
-                          startAngle="235" endAngle="305" direction="CLOCKWISE"
-                          align="CENTER" verticalAlign="CENTER">
-                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">STEPS </Font>
-                <Font family="archivo_bold" size="19" color="#ffF2F2F0">
-                    <Template>%d<Parameter expression="[STEP_COUNT]" /></Template>
-                </Font>
-            </TextCircular>
-            <Launch target="com.sec.android.app.shealth" />
-        </PartText>
+            <!-- ==== slot 2: steps. arc r 192-200, 60 deg sweep from 240 ==== -->
+            <PartDraw name="slot2_arc" x="0" y="0" width="480" height="480">
+                <Arc centerX="240" centerY="240" width="392" height="392"
+                     startAngle="240" endAngle="300" direction="CLOCKWISE">
+                    <Stroke color="#ff2A2D31" width="8" />
+                </Arc>
+                <Arc centerX="240" centerY="240" width="392" height="392"
+                     startAngle="240" endAngle="240" direction="CLOCKWISE">
+                    <Transform target="endAngle" value="240 + 60 * [STEP_PERCENT] / 100" />
+                    <Stroke color="#ff4A9EDB" width="8" />
+                </Arc>
+            </PartDraw>
+            <PartText name="slot2_readout" x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="352" height="352"
+                              startAngle="235" endAngle="305" direction="CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">STEPS </Font>
+                    <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                        <Template>%d<Parameter expression="[STEP_COUNT]" /></Template>
+                    </Font>
+                </TextCircular>
+            </PartText>
 
-        <!-- ==== slot 3: battery. arc r 192-200, 60 deg sweep from 60.
-             Low power recolours the readout and the arc (and nothing else). -->
-        <Condition>
-            <Expressions>
-                <Expression name="batt_low"><![CDATA[[BATTERY_IS_LOW]]]></Expression>
-            </Expressions>
-            <Compare expression="batt_low">
-                <Group name="slot3_low" x="0" y="0" width="480" height="480">
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <Arc centerX="240" centerY="240" width="392" height="392"
-                             startAngle="60" endAngle="120" direction="CLOCKWISE">
-                            <Stroke color="#ff2A2D31" width="8" />
-                        </Arc>
-                        <Arc centerX="240" centerY="240" width="392" height="392"
-                             startAngle="60" endAngle="60" direction="CLOCKWISE">
-                            <Transform target="endAngle" value="60 + 60 * [BATTERY_PERCENT] / 100" />
-                            <Stroke color="#ffE0A33A" width="8" />
-                        </Arc>
-                    </PartDraw>
+            <!-- ==== slot 3: battery. arc r 192-200, 60 deg sweep from 60.
+                 Low power recolours the readout and the arc (and nothing else). -->
+            <Condition>
+                <Expressions>
+                    <Expression name="batt_low"><![CDATA[[BATTERY_IS_LOW]]]></Expression>
+                </Expressions>
+                <Compare expression="batt_low">
+                    <Group name="slot3_low" x="0" y="0" width="480" height="480">
+                        <PartDraw x="0" y="0" width="480" height="480">
+                            <Arc centerX="240" centerY="240" width="392" height="392"
+                                 startAngle="60" endAngle="120" direction="CLOCKWISE">
+                                <Stroke color="#ff2A2D31" width="8" />
+                            </Arc>
+                            <Arc centerX="240" centerY="240" width="392" height="392"
+                                 startAngle="60" endAngle="60" direction="CLOCKWISE">
+                                <Transform target="endAngle" value="60 + 60 * [BATTERY_PERCENT] / 100" />
+                                <Stroke color="#ffE0A33A" width="8" />
+                            </Arc>
+                        </PartDraw>
+                        <PartText x="0" y="0" width="480" height="480">
+                            <TextCircular centerX="240" centerY="240" width="352" height="352"
+                                          startAngle="55" endAngle="125" direction="CLOCKWISE"
+                                          align="CENTER" verticalAlign="CENTER">
+                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
+                                <Font family="archivo_bold" size="19" color="#ffE0A33A">
+                                    <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                    </Group>
+                </Compare>
+                <Default>
+                    <Group name="slot3_normal" x="0" y="0" width="480" height="480">
+                        <PartDraw x="0" y="0" width="480" height="480">
+                            <Arc centerX="240" centerY="240" width="392" height="392"
+                                 startAngle="60" endAngle="120" direction="CLOCKWISE">
+                                <Stroke color="#ff2A2D31" width="8" />
+                            </Arc>
+                            <Arc centerX="240" centerY="240" width="392" height="392"
+                                 startAngle="60" endAngle="60" direction="CLOCKWISE">
+                                <Transform target="endAngle" value="60 + 60 * [BATTERY_PERCENT] / 100" />
+                                <Stroke color="#ff4A9EDB" width="8" />
+                            </Arc>
+                        </PartDraw>
+                        <PartText x="0" y="0" width="480" height="480">
+                            <TextCircular centerX="240" centerY="240" width="352" height="352"
+                                          startAngle="55" endAngle="125" direction="CLOCKWISE"
+                                          align="CENTER" verticalAlign="CENTER">
+                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
+                                <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                                    <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                                </Font>
+                            </TextCircular>
+                        </PartText>
+                    </Group>
+                </Default>
+            </Condition>
+
+            <!-- ==== slot 4: alarm, rim r 198 centred 315 deg ==== -->
+            <ComplicationSlot slotId="4" supportedTypes="SHORT_TEXT EMPTY"
+                              x="0" y="0" width="480" height="480">
+                <BoundingBox x="60" y="60" width="150" height="120" />
+                <Complication type="SHORT_TEXT">
                     <PartText x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="352" height="352"
-                                      startAngle="55" endAngle="125" direction="CLOCKWISE"
+                        <TextCircular centerX="240" centerY="240" width="396" height="396"
+                                      startAngle="290" endAngle="340" direction="CLOCKWISE"
                                       align="CENTER" verticalAlign="CENTER">
-                            <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
-                            <Font family="archivo_bold" size="19" color="#ffE0A33A">
-                                <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">ALM </Font>
+                            <Font family="archivo_bold" size="14" color="#ffF2F2F0">
+                                <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                             </Font>
                         </TextCircular>
-                        <Launch target="BATTERY_STATUS" />
                     </PartText>
-                </Group>
-            </Compare>
-            <Default>
-                <Group name="slot3_normal" x="0" y="0" width="480" height="480">
-                    <PartDraw x="0" y="0" width="480" height="480">
-                        <Arc centerX="240" centerY="240" width="392" height="392"
-                             startAngle="60" endAngle="120" direction="CLOCKWISE">
-                            <Stroke color="#ff2A2D31" width="8" />
-                        </Arc>
-                        <Arc centerX="240" centerY="240" width="392" height="392"
-                             startAngle="60" endAngle="60" direction="CLOCKWISE">
-                            <Transform target="endAngle" value="60 + 60 * [BATTERY_PERCENT] / 100" />
-                            <Stroke color="#ff4A9EDB" width="8" />
-                        </Arc>
-                    </PartDraw>
+                </Complication>
+            </ComplicationSlot>
+
+            <!-- ==== slot 5: timer, rim r 198 centred 45 deg ==== -->
+            <ComplicationSlot slotId="5" supportedTypes="SHORT_TEXT EMPTY"
+                              x="0" y="0" width="480" height="480">
+                <BoundingBox x="270" y="60" width="150" height="120" />
+                <Complication type="SHORT_TEXT">
                     <PartText x="0" y="0" width="480" height="480">
-                        <TextCircular centerX="240" centerY="240" width="352" height="352"
-                                      startAngle="55" endAngle="125" direction="CLOCKWISE"
+                        <TextCircular centerX="240" centerY="240" width="396" height="396"
+                                      startAngle="20" endAngle="70" direction="CLOCKWISE"
                                       align="CENTER" verticalAlign="CENTER">
-                            <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
-                            <Font family="archivo_bold" size="19" color="#ffF2F2F0">
-                                <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">TMR </Font>
+                            <Font family="archivo_bold" size="14" color="#ffF2F2F0">
+                                <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                             </Font>
                         </TextCircular>
-                        <Launch target="BATTERY_STATUS" />
                     </PartText>
-                </Group>
-            </Default>
-        </Condition>
+                </Complication>
+            </ComplicationSlot>
 
-        <!-- ==== slot 4: alarm, rim r 198 centred 315 deg ==== -->
-        <ComplicationSlot slotId="4" supportedTypes="SHORT_TEXT EMPTY"
-                          x="0" y="0" width="480" height="480">
-            <BoundingBox x="60" y="60" width="150" height="120" />
-            <Complication type="SHORT_TEXT">
-                <PartText x="0" y="0" width="480" height="480">
-                    <TextCircular centerX="240" centerY="240" width="396" height="396"
-                                  startAngle="290" endAngle="340" direction="CLOCKWISE"
-                                  align="CENTER" verticalAlign="CENTER">
-                        <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">ALM </Font>
-                        <Font family="archivo_bold" size="14" color="#ffF2F2F0">
-                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+            <!-- ==== slot 1: weather forecast strip, hours +1 +2 +3 ====
+                 Native WFF weather (v2+). WEATHER.HOURS index starts at 0, so the
+                 next three hours are indices 1, 2 and 3.
+                 Condition codes: 1 CLEAR 8 SUNNY | 14 PARTLY_CLOUDY |
+                 4 HEAVY_RAIN 6 RAIN 9 THUNDERSTORM 10 SLEET 12 LIGHT_RAIN | else cloud -->
+            <Group name="slot1_forecast" x="0" y="0" width="480" height="480">
+                <!-- hour +1 -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="wx1_clear"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 1 || [WEATHER.HOURS.1.CONDITION] == 8]]></Expression>
+                        <Expression name="wx1_partly"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 14]]></Expression>
+                        <Expression name="wx1_rain"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 4 || [WEATHER.HOURS.1.CONDITION] == 6 || [WEATHER.HOURS.1.CONDITION] == 9 || [WEATHER.HOURS.1.CONDITION] == 10 || [WEATHER.HOURS.1.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="wx1_clear">
+                        <Group name="wx1_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx1_partly">
+                        <Group name="wx1_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx1_rain">
+                        <Group name="wx1_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="wx1_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="157" y="276" width="38" height="22">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]" /></Template>
                         </Font>
-                    </TextCircular>
+                    </Text>
                 </PartText>
-            </Complication>
-        </ComplicationSlot>
-
-        <!-- ==== slot 5: timer, rim r 198 centred 45 deg ==== -->
-        <ComplicationSlot slotId="5" supportedTypes="SHORT_TEXT EMPTY"
-                          x="0" y="0" width="480" height="480">
-            <BoundingBox x="270" y="60" width="150" height="120" />
-            <Complication type="SHORT_TEXT">
-                <PartText x="0" y="0" width="480" height="480">
-                    <TextCircular centerX="240" centerY="240" width="396" height="396"
-                                  startAngle="20" endAngle="70" direction="CLOCKWISE"
-                                  align="CENTER" verticalAlign="CENTER">
-                        <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">TMR </Font>
-                        <Font family="archivo_bold" size="14" color="#ffF2F2F0">
-                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                <PartText x="157" y="298" width="38" height="14">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Template>%d<Parameter expression="([HOUR_0_23] + 1) % 24" /></Template>
                         </Font>
-                    </TextCircular>
+                    </Text>
                 </PartText>
-            </Complication>
-        </ComplicationSlot>
+                <!-- hour +2 -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="wx2_clear"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 1 || [WEATHER.HOURS.2.CONDITION] == 8]]></Expression>
+                        <Expression name="wx2_partly"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 14]]></Expression>
+                        <Expression name="wx2_rain"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 4 || [WEATHER.HOURS.2.CONDITION] == 6 || [WEATHER.HOURS.2.CONDITION] == 9 || [WEATHER.HOURS.2.CONDITION] == 10 || [WEATHER.HOURS.2.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="wx2_clear">
+                        <Group name="wx2_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx2_partly">
+                        <Group name="wx2_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx2_rain">
+                        <Group name="wx2_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="wx2_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="221" y="276" width="38" height="22">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="221" y="298" width="38" height="14">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Template>%d<Parameter expression="([HOUR_0_23] + 2) % 24" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <!-- hour +3 -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="wx3_clear"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 1 || [WEATHER.HOURS.3.CONDITION] == 8]]></Expression>
+                        <Expression name="wx3_partly"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 14]]></Expression>
+                        <Expression name="wx3_rain"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 4 || [WEATHER.HOURS.3.CONDITION] == 6 || [WEATHER.HOURS.3.CONDITION] == 9 || [WEATHER.HOURS.3.CONDITION] == 10 || [WEATHER.HOURS.3.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="wx3_clear">
+                        <Group name="wx3_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx3_partly">
+                        <Group name="wx3_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="wx3_rain">
+                        <Group name="wx3_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="wx3_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="285" y="276" width="38" height="22">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="285" y="298" width="38" height="14">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Template>%d<Parameter expression="([HOUR_0_23] + 3) % 24" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <!-- whole strip is one tap target -->
+                <PartText name="slot1_tap" x="150" y="244" width="180" height="72">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="com.samsung.android.watch.weather" />
+                </PartText>
+            </Group>
 
-        <!-- ==== slot 1: weather forecast strip, hours +1 +2 +3 ====
-             Native WFF weather (v2+). WEATHER.HOURS index starts at 0, so the
-             next three hours are indices 1, 2 and 3.
-             Condition codes: 1 CLEAR 8 SUNNY | 14 PARTLY_CLOUDY |
-             4 HEAVY_RAIN 6 RAIN 9 THUNDERSTORM 10 SLEET 12 LIGHT_RAIN | else cloud -->
-        <Group name="slot1_forecast" x="0" y="0" width="480" height="480">
-            <!-- hour +1 -->
+            <!-- ==== charging hides the minor row and the icon tile (section 9) ==== -->
             <Condition>
                 <Expressions>
-                    <Expression name="wx1_clear"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 1 || [WEATHER.HOURS.1.CONDITION] == 8]]></Expression>
-                    <Expression name="wx1_partly"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 14]]></Expression>
-                    <Expression name="wx1_rain"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 4 || [WEATHER.HOURS.1.CONDITION] == 6 || [WEATHER.HOURS.1.CONDITION] == 9 || [WEATHER.HOURS.1.CONDITION] == 10 || [WEATHER.HOURS.1.CONDITION] == 12]]></Expression>
+                    <Expression name="charging"><![CDATA[[BATTERY_CHARGING_STATUS]]]></Expression>
                 </Expressions>
-                <Compare expression="wx1_clear">
-                    <Group name="wx1_clear_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_clear_i" />
-                        </PartImage>
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_clear_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx1_partly">
-                    <Group name="wx1_partly_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_partly_i" />
-                        </PartImage>
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_partly_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx1_rain">
-                    <Group name="wx1_rain_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_rain_i" />
-                        </PartImage>
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_rain_a" />
-                        </PartImage>
+                <Compare expression="charging">
+                    <Group name="lower_cluster_hidden" x="0" y="0" width="480" height="480" alpha="0">
+                        <PartDraw x="0" y="0" width="1" height="1">
+                            <Rectangle x="0" y="0" width="1" height="1">
+                                <Fill color="#00000000" />
+                            </Rectangle>
+                        </PartDraw>
                     </Group>
                 </Compare>
                 <Default>
-                    <Group name="wx1_cloudy_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_cloudy_i" />
-                        </PartImage>
-                        <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_cloudy_a" />
+                    <Group name="lower_cluster" x="0" y="0" width="480" height="480">
+
+                        <!-- slot 6: minor row -->
+                        <ComplicationSlot slotId="6" supportedTypes="SHORT_TEXT EMPTY"
+                                          x="120" y="325" width="240" height="44">
+                            <BoundingBox x="0" y="0" width="240" height="44" />
+                            <Complication type="SHORT_TEXT">
+                                <PartText x="0" y="9" width="240" height="26">
+                                    <Text align="CENTER" verticalAlign="CENTER">
+                                        <Font family="archivo_medium" size="14" color="#ff8C8F93" letterSpacing="0.14">
+                                            <Upper>
+                                                <Template>%s <Parameter expression="[COMPLICATION.TITLE]" /></Template>
+                                            </Upper>
+                                        </Font>
+                                        <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                                        </Font>
+                                    </Text>
+                                </PartText>
+                            </Complication>
+                        </ComplicationSlot>
+
+                        <!-- slot 7: icon tile -->
+                        <PartDraw name="slot7_border" x="0" y="0" width="480" height="480">
+                            <RoundRectangle x="216" y="366" width="48" height="48"
+                                            cornerRadiusX="14" cornerRadiusY="14">
+                                <Stroke color="#ff2A2D31" width="1" />
+                            </RoundRectangle>
+                        </PartDraw>
+                        <PartImage name="slot7_glyph" x="214" y="364" width="52" height="52"
+                                   tintColor="#ff4A9EDB">
+                            <Image resource="tile_wallet" />
+                            <Launch target="https://pay.google.com/" />
                         </PartImage>
                     </Group>
                 </Default>
             </Condition>
-            <PartText x="157" y="276" width="38" height="22">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_bold" size="17" color="#ffF2F2F0">
-                        <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <PartText x="157" y="298" width="38" height="14">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
-                        <Template>%d<Parameter expression="([HOUR_0_23] + 1) % 24" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <!-- hour +2 -->
-            <Condition>
-                <Expressions>
-                    <Expression name="wx2_clear"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 1 || [WEATHER.HOURS.2.CONDITION] == 8]]></Expression>
-                    <Expression name="wx2_partly"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 14]]></Expression>
-                    <Expression name="wx2_rain"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 4 || [WEATHER.HOURS.2.CONDITION] == 6 || [WEATHER.HOURS.2.CONDITION] == 9 || [WEATHER.HOURS.2.CONDITION] == 10 || [WEATHER.HOURS.2.CONDITION] == 12]]></Expression>
-                </Expressions>
-                <Compare expression="wx2_clear">
-                    <Group name="wx2_clear_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_clear_i" />
-                        </PartImage>
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_clear_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx2_partly">
-                    <Group name="wx2_partly_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_partly_i" />
-                        </PartImage>
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_partly_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx2_rain">
-                    <Group name="wx2_rain_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_rain_i" />
-                        </PartImage>
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_rain_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Default>
-                    <Group name="wx2_cloudy_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_cloudy_i" />
-                        </PartImage>
-                        <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_cloudy_a" />
-                        </PartImage>
-                    </Group>
-                </Default>
-            </Condition>
-            <PartText x="221" y="276" width="38" height="22">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_bold" size="17" color="#ffF2F2F0">
-                        <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <PartText x="221" y="298" width="38" height="14">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
-                        <Template>%d<Parameter expression="([HOUR_0_23] + 2) % 24" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <!-- hour +3 -->
-            <Condition>
-                <Expressions>
-                    <Expression name="wx3_clear"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 1 || [WEATHER.HOURS.3.CONDITION] == 8]]></Expression>
-                    <Expression name="wx3_partly"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 14]]></Expression>
-                    <Expression name="wx3_rain"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 4 || [WEATHER.HOURS.3.CONDITION] == 6 || [WEATHER.HOURS.3.CONDITION] == 9 || [WEATHER.HOURS.3.CONDITION] == 10 || [WEATHER.HOURS.3.CONDITION] == 12]]></Expression>
-                </Expressions>
-                <Compare expression="wx3_clear">
-                    <Group name="wx3_clear_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_clear_i" />
-                        </PartImage>
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_clear_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx3_partly">
-                    <Group name="wx3_partly_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_partly_i" />
-                        </PartImage>
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_partly_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Compare expression="wx3_rain">
-                    <Group name="wx3_rain_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_rain_i" />
-                        </PartImage>
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_rain_a" />
-                        </PartImage>
-                    </Group>
-                </Compare>
-                <Default>
-                    <Group name="wx3_cloudy_g" x="0" y="0" width="480" height="480">
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
-                            <Image resource="wx_cloudy_i" />
-                        </PartImage>
-                        <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
-                            <Image resource="wx_cloudy_a" />
-                        </PartImage>
-                    </Group>
-                </Default>
-            </Condition>
-            <PartText x="285" y="276" width="38" height="22">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_bold" size="17" color="#ffF2F2F0">
-                        <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <PartText x="285" y="298" width="38" height="14">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
-                        <Template>%d<Parameter expression="([HOUR_0_23] + 3) % 24" /></Template>
-                    </Font>
-                </Text>
-            </PartText>
-            <!-- whole strip is one tap target -->
-            <PartText name="slot1_tap" x="150" y="244" width="180" height="72">
-                <Text align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_medium" size="1" color="#00000000"> </Font>
-                </Text>
-                <Launch target="com.samsung.android.watch.weather" />
-            </PartText>
+
+            <!-- ==== tap targets (section 8). Transparent, drawn last, all at
+                 least 44 x 44. Kept off the full-face parts that carry the curved
+                 text, whose boxes would otherwise capture every tap on the dial. -->
+            <Group name="tap_targets" x="0" y="0" width="480" height="480">
+                <PartText name="tap_slot0" x="120" y="57" width="240" height="44">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="CALENDAR" />
+                </PartText>
+                <PartText name="tap_slot2" x="30" y="180" width="90" height="120">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="com.sec.android.app.shealth" />
+                </PartText>
+                <PartText name="tap_slot3" x="360" y="180" width="90" height="120">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="BATTERY_STATUS" />
+                </PartText>
+            </Group>
+
         </Group>
+        </ListOption>
+        <ListOption id="c">
+            <Group name="layout_c" x="0" y="0" width="480" height="480" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
 
-        <!-- ==== charging hides the minor row and the icon tile (section 9) ==== -->
-        <Condition>
-            <Expressions>
-                <Expression name="charging"><![CDATA[[BATTERY_CHARGING_STATUS]]]></Expression>
-            </Expressions>
-            <Compare expression="charging">
-                <Group name="lower_cluster_hidden" x="0" y="0" width="480" height="480" alpha="0">
-                    <PartDraw x="0" y="0" width="1" height="1">
-                        <Rectangle x="0" y="0" width="1" height="1">
-                            <Fill color="#00000000" />
-                        </Rectangle>
-                    </PartDraw>
+                <!-- ==== chrome, identical to Layout A (section 2) ==== -->
+                <PartImage x="0" y="0" width="480" height="480" tintColor="#ff3E4247">
+                    <Image resource="track_minute" />
+                </PartImage>
+                <PartImage x="0" y="0" width="480" height="480" tintColor="#ff6A6E73">
+                    <Image resource="track_hour" />
+                </PartImage>
+                <PartDraw x="0" y="0" width="480" height="480">
+                    <Rectangle x="239" y="10" width="2" height="22">
+                        <Fill color="#ff4A9EDB" />
+                    </Rectangle>
+                </PartDraw>
+                <PartDraw x="0" y="0" width="480" height="480" pivotX="0.5" pivotY="0.5" angle="0">
+                    <Transform target="angle" value="[SECOND] * 6" />
+                    <Ellipse centerX="240" centerY="18" width="8" height="8">
+                        <Fill color="#ff4A9EDB" />
+                    </Ellipse>
+                </PartDraw>
+
+                <!-- ==== slot 0: top strip, y 130 ==== -->
+                <PartText x="0" y="130" width="480" height="28">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_semibold" size="21" color="#ffF2F2F0" letterSpacing="0.16">
+                            <Upper>
+                                <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
+                            </Upper>
+                        </Font>
+                    </Text>
+                </PartText>
+
+                <!-- ==== time, y 162, 96 px, line-height 1.14. Colon box is 32 px
+                     (335/1000 em at 96 px), so the digit boxes meet it at 224 / 256. ==== -->
+                <DigitalClock x="0" y="162" width="480" height="109">
+                    <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
+                              align="END" verticalAlign="CENTER"
+                              x="0" y="0" width="224" height="109">
+                        <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04" />
+                    </TimeText>
+                    <TimeText format="mm"
+                              align="START" verticalAlign="CENTER"
+                              x="256" y="0" width="224" height="109">
+                        <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04" />
+                    </TimeText>
+                </DigitalClock>
+                <PartText x="224" y="162" width="32" height="109">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="96" color="#ff8C8F93">:</Font>
+                    </Text>
+                </PartText>
+
+                <!-- ==== slot 2: steps on the rim, r 198, centred 315 deg ==== -->
+                <PartText x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="396" height="396"
+                              startAngle="290" endAngle="340" direction="CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">STP </Font>
+                    <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Template>%d<Parameter expression="[STEP_COUNT]" /></Template>
+                    </Font>
+                </TextCircular>
+                </PartText>
+
+                <!-- ==== slot 3: battery on the rim, r 198, centred 45 deg.
+                     Low power recolours the readout (no arc exists in Layout C). ==== -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="c_batt_low"><![CDATA[[BATTERY_IS_LOW]]]></Expression>
+                    </Expressions>
+                    <Compare expression="c_batt_low">
+                        <PartText x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="396" height="396"
+                              startAngle="20" endAngle="70" direction="CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">BAT </Font>
+                    <Font family="archivo_bold" size="16" color="#ffE0A33A">
+                        <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                    </Font>
+                </TextCircular>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <PartText x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="396" height="396"
+                              startAngle="20" endAngle="70" direction="CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">BAT </Font>
+                    <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
+                    </Font>
+                </TextCircular>
+                        </PartText>
+                    </Default>
+                </Condition>
+
+                <!-- ==== slot 4: alarm, r 198 centred 225 deg, reversed path ==== -->
+                <ComplicationSlot slotId="4" supportedTypes="SHORT_TEXT EMPTY"
+                                  x="0" y="0" width="480" height="480">
+                    <BoundingBox x="56" y="336" width="88" height="88" />
+                    <Complication type="SHORT_TEXT">
+                        <PartText x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="396" height="396"
+                              startAngle="250" endAngle="200" direction="COUNTER_CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">ALM </Font>
+                    <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                    </Font>
+                </TextCircular>
+                        </PartText>
+                    </Complication>
+                </ComplicationSlot>
+
+                <!-- ==== slot 5: timer, r 198 centred 135 deg, reversed path ==== -->
+                <ComplicationSlot slotId="5" supportedTypes="SHORT_TEXT EMPTY"
+                                  x="0" y="0" width="480" height="480">
+                    <BoundingBox x="336" y="336" width="88" height="88" />
+                    <Complication type="SHORT_TEXT">
+                        <PartText x="0" y="0" width="480" height="480">
+                <TextCircular centerX="240" centerY="240" width="396" height="396"
+                              startAngle="160" endAngle="110" direction="COUNTER_CLOCKWISE"
+                              align="CENTER" verticalAlign="CENTER">
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">TMR </Font>
+                    <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                    </Font>
+                </TextCircular>
+                        </PartText>
+                    </Complication>
+                </ComplicationSlot>
+
+                <!-- ==== slot 1: forecast strip, y 284, icon 20, no hour label ==== -->
+                <Group name="c_forecast" x="0" y="0" width="480" height="480">
+                <Condition>
+                    <Expressions>
+                        <Expression name="cwx1_clear"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 1 || [WEATHER.HOURS.1.CONDITION] == 8]]></Expression>
+                        <Expression name="cwx1_partly"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 14]]></Expression>
+                        <Expression name="cwx1_rain"><![CDATA[[WEATHER.HOURS.1.CONDITION] == 4 || [WEATHER.HOURS.1.CONDITION] == 6 || [WEATHER.HOURS.1.CONDITION] == 9 || [WEATHER.HOURS.1.CONDITION] == 10 || [WEATHER.HOURS.1.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="cwx1_clear">
+                        <Group name="cwx1_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx1_partly">
+                        <Group name="cwx1_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx1_rain">
+                        <Group name="cwx1_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="cwx1_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="174" y="306" width="28" height="20">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <Condition>
+                    <Expressions>
+                        <Expression name="cwx2_clear"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 1 || [WEATHER.HOURS.2.CONDITION] == 8]]></Expression>
+                        <Expression name="cwx2_partly"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 14]]></Expression>
+                        <Expression name="cwx2_rain"><![CDATA[[WEATHER.HOURS.2.CONDITION] == 4 || [WEATHER.HOURS.2.CONDITION] == 6 || [WEATHER.HOURS.2.CONDITION] == 9 || [WEATHER.HOURS.2.CONDITION] == 10 || [WEATHER.HOURS.2.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="cwx2_clear">
+                        <Group name="cwx2_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx2_partly">
+                        <Group name="cwx2_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx2_rain">
+                        <Group name="cwx2_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="cwx2_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="226" y="306" width="28" height="20">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <Condition>
+                    <Expressions>
+                        <Expression name="cwx3_clear"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 1 || [WEATHER.HOURS.3.CONDITION] == 8]]></Expression>
+                        <Expression name="cwx3_partly"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 14]]></Expression>
+                        <Expression name="cwx3_rain"><![CDATA[[WEATHER.HOURS.3.CONDITION] == 4 || [WEATHER.HOURS.3.CONDITION] == 6 || [WEATHER.HOURS.3.CONDITION] == 9 || [WEATHER.HOURS.3.CONDITION] == 10 || [WEATHER.HOURS.3.CONDITION] == 12]]></Expression>
+                    </Expressions>
+                    <Compare expression="cwx3_clear">
+                        <Group name="cwx3_clear_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_clear_i" />
+                            </PartImage>
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_clear_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx3_partly">
+                        <Group name="cwx3_partly_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_partly_i" />
+                            </PartImage>
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_partly_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Compare expression="cwx3_rain">
+                        <Group name="cwx3_rain_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_rain_i" />
+                            </PartImage>
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_rain_a" />
+                            </PartImage>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="cwx3_cloudy_g" x="0" y="0" width="480" height="480">
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Image resource="wx_cloudy_i" />
+                            </PartImage>
+                            <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Image resource="wx_cloudy_a" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
+                <PartText x="278" y="306" width="28" height="20">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]" /></Template>
+                        </Font>
+                    </Text>
+                </PartText>
                 </Group>
-            </Compare>
-            <Default>
-                <Group name="lower_cluster" x="0" y="0" width="480" height="480">
 
-                    <!-- slot 6: minor row -->
-                    <ComplicationSlot slotId="6" supportedTypes="SHORT_TEXT EMPTY"
-                                      x="120" y="330" width="240" height="34">
-                        <BoundingBox x="0" y="0" width="240" height="34" />
-                        <Complication type="SHORT_TEXT">
-                            <PartText x="0" y="0" width="240" height="34">
-                                <Text align="CENTER" verticalAlign="CENTER">
-                                    <Font family="archivo_medium" size="14" color="#ff8C8F93" letterSpacing="0.14">
-                                        <Upper>
-                                            <Template>%s <Parameter expression="[COMPLICATION.TITLE]" /></Template>
-                                        </Upper>
-                                    </Font>
-                                    <Font family="archivo_bold" size="19" color="#ffF2F2F0">
-                                        <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                                    </Font>
-                                </Text>
-                            </PartText>
-                        </Complication>
-                    </ComplicationSlot>
+                <!-- ==== charging hides the minor row and the icon tile ==== -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="c_charging"><![CDATA[[BATTERY_CHARGING_STATUS]]]></Expression>
+                    </Expressions>
+                    <Compare expression="c_charging">
+                        <Group name="c_lower_hidden" x="0" y="0" width="480" height="480" alpha="0">
+                            <PartDraw x="0" y="0" width="1" height="1">
+                                <Rectangle x="0" y="0" width="1" height="1">
+                                    <Fill color="#00000000" />
+                                </Rectangle>
+                            </PartDraw>
+                        </Group>
+                    </Compare>
+                    <Default>
+                        <Group name="c_lower" x="0" y="0" width="480" height="480">
+                            <ComplicationSlot slotId="6" supportedTypes="SHORT_TEXT EMPTY"
+                                              x="120" y="317" width="240" height="44">
+                                <BoundingBox x="0" y="0" width="240" height="44" />
+                                <Complication type="SHORT_TEXT">
+                                    <PartText x="0" y="9" width="240" height="26">
+                                        <Text align="CENTER" verticalAlign="CENTER">
+                                            <Font family="archivo_medium" size="12" color="#ff8C8F93" letterSpacing="0.14">
+                                                <Upper>
+                                                    <Template>%s <Parameter expression="[COMPLICATION.TITLE]" /></Template>
+                                                </Upper>
+                                            </Font>
+                                            <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                                                <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
+                                            </Font>
+                                        </Text>
+                                    </PartText>
+                                </Complication>
+                            </ComplicationSlot>
+                            <PartDraw x="0" y="0" width="480" height="480">
+                                <RoundRectangle x="216" y="358" width="48" height="48"
+                                                cornerRadiusX="14" cornerRadiusY="14">
+                                    <Stroke color="#ff2A2D31" width="1" />
+                                </RoundRectangle>
+                            </PartDraw>
+                            <PartImage x="214" y="356" width="52" height="52" tintColor="#ff4A9EDB">
+                                <Image resource="tile_wallet" />
+                                <Launch target="https://pay.google.com/" />
+                            </PartImage>
+                        </Group>
+                    </Default>
+                </Condition>
 
-                    <!-- slot 7: icon tile -->
-                    <PartDraw name="slot7_border" x="0" y="0" width="480" height="480">
-                        <RoundRectangle x="216" y="366" width="48" height="48"
-                                        cornerRadiusX="14" cornerRadiusY="14">
-                            <Stroke color="#ff2A2D31" width="1" />
-                        </RoundRectangle>
-                    </PartDraw>
-                    <PartImage name="slot7_glyph" x="214" y="364" width="52" height="52"
-                               tintColor="#ff4A9EDB">
-                        <Image resource="tile_wallet" />
-                        <Launch target="https://pay.google.com/" />
-                    </PartImage>
+                <!-- ==== tap targets (section 8), all at least 44 x 44 ==== -->
+                <Group name="c_taps" x="0" y="0" width="480" height="480">
+                <PartText name="c_tap_slot0" x="120" y="123" width="240" height="44">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="CALENDAR" />
+                </PartText>
+                <PartText name="c_tap_slot2" x="56" y="56" width="88" height="88">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="com.sec.android.app.shealth" />
+                </PartText>
+                <PartText name="c_tap_slot3" x="336" y="56" width="88" height="88">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="BATTERY_STATUS" />
+                </PartText>
+                <PartText name="c_tap_slot1" x="160" y="280" width="160" height="46">
+                    <Text align="CENTER" verticalAlign="CENTER">
+                        <Font family="archivo_medium" size="1" color="#00000000"> </Font>
+                    </Text>
+                    <Launch target="com.samsung.android.watch.weather" />
+                </PartText>
                 </Group>
-            </Default>
-        </Condition>
+            </Group>
+        </ListOption>
+    </ListConfiguration>
 
+    <!-- ================================================================
+         STATUS BAND - shared by both layouts (section 9)
+         ================================================================ -->
+    <Group name="status_band" x="0" y="0" width="480" height="480" alpha="255">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
         <!-- ==== status band (section 9) ==== -->
         <Condition>
             <Expressions>
@@ -506,7 +926,6 @@
                 </Group>
             </Compare>
         </Condition>
-
     </Group>
 
     <!-- ================================================================
