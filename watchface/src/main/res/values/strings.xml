@@ -15,4 +15,12 @@
     <string name="cfg_num_jet">JetBrains Mono</string>
     <string name="cfg_num_bebas">Bebas Neue</string>
     <string name="cfg_num_playfair">Playfair Display</string>
+
+    <!-- watch face editor: colour selector -->
+    <string name="cfg_style">Palette</string>
+    <string name="cfg_style_swiss">Swiss</string>
+    <string name="cfg_style_mission">Mission</string>
+    <string name="cfg_style_editorial">Editorial</string>
+    <string name="cfg_style_bauhaus">Bauhaus</string>
+    <string name="cfg_style_stealth">Stealth</string>
 </resources>

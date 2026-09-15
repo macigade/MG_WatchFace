@@ -11,9 +11,13 @@ Facer/WatchMaker-style faces cannot be installed on it. WFF is declarative
 XML: the APK contains no executable code (`android:hasCode="false"`) and the
 platform does the rendering.
 
-Format version used here: **2** (`com.google.wear.watchface.format.version`),
-which maps to Wear OS 5 / API 34. Raise it only when you need elements from a
-later version (3 = Wear OS 5.1, 4 = Wear OS 6).
+Format version used here: **4** (`com.google.wear.watchface.format.version`),
+which maps to Wear OS 6 / One UI 8 Watch — the update the Galaxy Watch 7
+received in October 2025. Version 4 is required because `Font`, `Fill`,
+`Stroke` and `tintColor` colours only became transformable in 4, and the five
+palettes drive all of them from one expression. `minSdk` deliberately stays at
+34: the property above is the real gate, and raising `minSdk` to 36 would pull
+the whole toolchain up to AGP 9.
 
 ## Layout
 
@@ -92,10 +96,10 @@ The official validator catches schema errors that the Gradle build will not:
 
 ```bash
 # jar from the releases of github.com/google/watchface
-java -jar tools/wff-validator.jar 2 watchface/src/main/res/raw/watchface.xml
+java -jar tools/wff-validator.jar 4 watchface/src/main/res/raw/watchface.xml
 ```
 
-The `2` is the WFF version and must match the value in `AndroidManifest.xml`.
+The `4` is the WFF version and must match the value in `AndroidManifest.xml`.
 
 Runtime errors (missing resources, bad expressions) show up in logcat:
 
@@ -147,6 +151,26 @@ always-on group. Curved text is `TextCircular`; the forecast reads native
 tintable glyphs. Tap targets are separate transparent parts, all at least
 44 x 44, so the full-face parts that carry curved text never capture a tap.
 
+### Palette (`style`) and numerals
+
+Five palettes from section 3 — Swiss, Mission, Editorial, Bauhaus, Stealth —
+plus the always-on ink/dim pair for each. One set of elements serves all five:
+every colour-bearing attribute carries
+
+```
+<Transform target="color" value="extractColorFromColors(&quot;<5 hex values>&quot;, false, ...)" />
+```
+
+where the index comes from `[CONFIGURATION.style]`. The Swiss value stays on
+the attribute as the static fallback. 159 such transforms; adding a sixth
+palette means appending one hex value to each of nine rows.
+
+Six numeral styles, also section 3. `Font family` is not transformable in any
+WFF version, so these are `Condition` branches on `[CONFIGURATION.numerals]` —
+six per clock, across Layout A, Layout C and the always-on group. Each
+branch's colon box is that font's own colon advance centred on x 240, read
+from the TTF, so the colon does not move when the style changes.
+
 Angles follow the WFF convention, 0 degrees = 12 o'clock clockwise. That is the
 same convention HANDOFF uses: a 60 degree sweep from 240 is centred on 9
 o'clock, and from 60 on 3 o'clock, exactly as its arc readout rows state.
@@ -163,12 +187,13 @@ The platform behaviour was followed in each case:
 | fonts in `assets/fonts/` | WFF reads `res/font/` | `res/font/*.ttf` |
 | "no arc-text primitive", use Watch Face Studio | `TextCircular` draws text on an arc | pure WFF, no WFS |
 | "no standard WFF forecast data source" | WFF 2 has 8 h hourly weather | native `[WEATHER.HOURS.*]` |
+| `format.version = 2` | colours are only transformable from 4 | **version 4**, so five palettes need one set of elements instead of five copies |
 
 ## Regenerating the assets
 
 ```bash
-python3 tools/render_preview.py      # preview.png + the two editor option icons
-python3 tools/verify.py              # 43 structural checks, exits non-zero on failure
+python3 tools/render_preview.py      # preview.png + all 13 editor option icons
+python3 tools/verify.py              # 62 structural checks, exits non-zero on failure
 ```
 
 ## Alternative: Watch Face Studio

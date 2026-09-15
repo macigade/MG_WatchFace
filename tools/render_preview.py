@@ -14,11 +14,21 @@ from PIL import Image, ImageDraw, ImageFont
 import math, os, sys
 
 S=480; C=240
-BG="#0A0A0B"; INK="#F2F2F0"; DIM="#8C8F93"; TRACK="#2A2D31"; ACCENT="#4A9EDB"
 FD="watchface/src/main/res/font"; DD="watchface/src/main/res/drawable-nodpi"
+# HANDOFF section 3, column order swiss mission editorial bauhaus stealth
+TOKENS=["bg","ink","dim","track","tick","tickhour","accent"]
+PALETTES={s:dict(zip(TOKENS,v)) for s,v in {
+ "swiss":    ["#0A0A0B","#F2F2F0","#8C8F93","#2A2D31","#3E4247","#6A6E73","#4A9EDB"],
+ "mission":  ["#060806","#DCE8D4","#8AA283","#1E2A1A","#2A3A24","#4E6644","#E0A33A"],
+ "editorial":["#0B0A08","#F6F0E6","#A29684","#332C24","#453C30","#70624E","#D6B25E"],
+ "bauhaus":  ["#111110","#F8F5ED","#B4AEA0","#2A2926","#35342F","#5A5850","#E0623A"],
+ "stealth":  ["#000000","#CDD0D3","#65686B","#16181A","#1E2124","#3A3E41","#EDEFF1"],
+}.items()}
 def fnt(n,s): return ImageFont.truetype(f"{FD}/{n}.ttf", s)
 
-def build(layout):
+def build(layout, style="swiss"):
+    P=PALETTES[style]
+    BG,INK,DIM,TRACK,ACCENT = P["bg"],P["ink"],P["dim"],P["track"],P["accent"]
     img=Image.new("RGBA",(S,S),(0,0,0,0)); d=ImageDraw.Draw(img)
     d.ellipse([0,0,S-1,S-1], fill=BG)
 
@@ -53,7 +63,7 @@ def build(layout):
         d.arc([C-r,C-r,C+r,C+r], a0-90, a1-90, fill=col, width=w)
 
     # chrome, identical in both layouts
-    tint("track_minute",(0,0,S,S),"#3E4247"); tint("track_hour",(0,0,S,S),"#6A6E73")
+    tint("track_minute",(0,0,S,S),P["tick"]); tint("track_hour",(0,0,S,S),P["tickhour"])
     d.rectangle([239,10,240,31], fill=ACCENT)
     sa=math.radians(32*6)
     d.ellipse([C+222*math.sin(sa)-4,C-222*math.cos(sa)-4,C+222*math.sin(sa)+4,C-222*math.cos(sa)+4], fill=ACCENT)
@@ -106,8 +116,33 @@ a=build("a"); c=build("c")
 a.save(f"{DD}/preview.png", optimize=True)
 a.resize((200,200), Image.LANCZOS).save(f"{DD}/opt_layout_a.png", optimize=True)
 c.resize((200,200), Image.LANCZOS).save(f"{DD}/opt_layout_c.png", optimize=True)
+for st in PALETTES:
+    build("a", st).resize((200,200), Image.LANCZOS).save(f"{DD}/opt_style_{st}.png", optimize=True)
+
+NUM=[("archivo","archivo_bold",-0.04),("barlow","barlow_condensed_medium",0.01),
+     ("saira","saira_semibold",-0.02),("jet","jetbrains_mono_semibold",-0.02),
+     ("bebas","bebas_neue_regular",0.01),("playfair","playfair_display_semibold",-0.015)]
+from fontTools.ttLib import TTFont
+for sid,fam,tr in NUM:
+    im=Image.new("RGBA",(200,200),(0,0,0,0)); dd=ImageDraw.Draw(im)
+    dd.ellipse([0,0,199,199], fill=PALETTES["swiss"]["bg"])
+    t=TTFont(f"{FD}/{fam}.ttf", lazy=True)
+    ca=t['hmtx'][t.getBestCmap()[ord(':')]][0]/t['head'].unitsPerEm*44
+    f=ImageFont.truetype(f"{FD}/{fam}.ttf",44); sp=tr*44
+    def put(txt,x,anchor,fill):
+        cx = x-(sum(f.getlength(ch)+sp for ch in txt)-sp) if anchor=="rs" else x
+        for ch in txt: dd.text((cx,118),ch,font=f,fill=fill,anchor="ls"); cx+=f.getlength(ch)+sp
+    put("10",100-ca/2,"rs",PALETTES["swiss"]["ink"]); put(":",100-ca/2,"ls",PALETTES["swiss"]["dim"])
+    put("08",100+ca/2,"ls",PALETTES["swiss"]["ink"])
+    dd.text((100,150), sid.upper(), font=fnt("archivo_medium",15),
+            fill=PALETTES["swiss"]["dim"], anchor="ms")
+    im.save(f"{DD}/opt_num_{sid}.png", optimize=True)
+
 if "--sheet" in sys.argv:
     sh=Image.new("RGBA",(S*2+24,S),(24,24,26,255))
     sh.alpha_composite(a,(0,0)); sh.alpha_composite(c,(S+24,0)); sh.save("/tmp/layouts.png")
-for f in ("preview.png","opt_layout_a.png","opt_layout_c.png"):
-    print(f"{f:18} {os.path.getsize(DD+'/'+f):6} B")
+    ps=Image.new("RGBA",(S*5+4*16,S),(24,24,26,255))
+    for i,st in enumerate(PALETTES): ps.alpha_composite(build("a",st),(i*(S+16),0))
+    ps.save("/tmp/palettes.png")
+import glob
+print(f"{len(glob.glob(DD+'/opt_*.png'))} editor icons + preview.png written")

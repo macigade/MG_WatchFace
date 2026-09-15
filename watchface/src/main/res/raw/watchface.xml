@@ -41,9 +41,23 @@
             <ListOption id="playfair" displayName="cfg_num_playfair"
                         screenReaderText="cfg_num_playfair" icon="opt_num_playfair" />
         </ListConfiguration>
+        <ListConfiguration id="style" displayName="cfg_style"
+                           screenReaderText="cfg_style" defaultValue="swiss">
+            <ListOption id="swiss" displayName="cfg_style_swiss"
+                        screenReaderText="cfg_style_swiss" icon="opt_style_swiss" />
+            <ListOption id="mission" displayName="cfg_style_mission"
+                        screenReaderText="cfg_style_mission" icon="opt_style_mission" />
+            <ListOption id="editorial" displayName="cfg_style_editorial"
+                        screenReaderText="cfg_style_editorial" icon="opt_style_editorial" />
+            <ListOption id="bauhaus" displayName="cfg_style_bauhaus"
+                        screenReaderText="cfg_style_bauhaus" icon="opt_style_bauhaus" />
+            <ListOption id="stealth" displayName="cfg_style_stealth"
+                        screenReaderText="cfg_style_stealth" icon="opt_style_stealth" />
+        </ListConfiguration>
     </UserConfigurations>
 
     <Scene backgroundColor="#ff0A0A0B">
+        <Transform target="backgroundColor" value="extractColorFromColors(&quot;0A0A0B 060806 0B0A08 111110 000000&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
 
     <!-- ================================================================
          INTERACTIVE - Layout A "Instrument" / Layout C "Orbit", picked in the
@@ -58,16 +72,20 @@
             <!-- ==== fixed chrome (HANDOFF section 2) ==== -->
             <!-- minute track: r 224-232, 60 marks x 0.5 deg, hour slots omitted -->
             <PartImage name="track_minute" x="0" y="0" width="480" height="480" tintColor="#ff3E4247">
+                <Transform target="tintColor" value="extractColorFromColors(&quot;3E4247 2A3A24 453C30 35342F 1E2124&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                 <Image resource="track_minute" />
             </PartImage>
             <!-- hour track: r 214-232, 12 marks x 1.4 deg -->
             <PartImage name="track_hour" x="0" y="0" width="480" height="480" tintColor="#ff6A6E73">
+                <Transform target="tintColor" value="extractColorFromColors(&quot;6A6E73 4E6644 70624E 5A5850 3A3E41&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                 <Image resource="track_hour" />
             </PartImage>
             <!-- 12 index -->
             <PartDraw name="index_12" x="0" y="0" width="480" height="480">
                 <Rectangle x="239" y="10" width="2" height="22">
-                    <Fill color="#ff4A9EDB" />
+                    <Fill color="#ff4A9EDB">
+                        <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                    </Fill>
                 </Rectangle>
             </PartDraw>
             <!-- seconds index: r 222, dia 8, steps 6 deg/s -->
@@ -75,7 +93,9 @@
                       pivotX="0.5" pivotY="0.5" angle="0">
                 <Transform target="angle" value="[SECOND] * 6" />
                 <Ellipse centerX="240" centerY="18" width="8" height="8">
-                    <Fill color="#ff4A9EDB" />
+                    <Fill color="#ff4A9EDB">
+                        <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                    </Fill>
                 </Ellipse>
             </PartDraw>
 
@@ -83,6 +103,7 @@
             <PartText name="slot0_datestrip" x="0" y="64" width="480" height="30">
                 <Text align="CENTER" verticalAlign="CENTER">
                     <Font family="archivo_semibold" size="23" color="#ffF2F2F0" letterSpacing="0.16">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Upper>
                             <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
                         </Upper>
@@ -93,7 +114,9 @@
             <!-- ==== hairline ==== -->
             <PartDraw name="hairline" x="0" y="0" width="480" height="480">
                 <Rectangle x="166" y="106" width="148" height="1">
-                    <Fill color="#ff2A2D31" />
+                    <Fill color="#ff2A2D31">
+                        <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                    </Fill>
                 </Rectangle>
             </PartDraw>
 
@@ -115,17 +138,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="223.2" height="116">
-                                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
+                                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="256.8" y="0" width="223.2" height="116">
-                                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04" />
+                                <Font family="archivo_bold" size="100" color="#ffF2F2F0" letterSpacing="-0.04">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="223.2" y="118" width="33.5" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="archivo_bold" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="archivo_bold" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -136,17 +166,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="228.3" height="116">
-                                <Font family="barlow_condensed_medium" size="100" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="barlow_condensed_medium" size="100" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="251.7" y="0" width="228.3" height="116">
-                                <Font family="barlow_condensed_medium" size="100" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="barlow_condensed_medium" size="100" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="228.3" y="118" width="23.4" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="barlow_condensed_medium" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="barlow_condensed_medium" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -157,17 +194,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="226.3" height="116">
-                                <Font family="saira_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="saira_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="253.7" y="0" width="226.3" height="116">
-                                <Font family="saira_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="saira_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="226.3" y="118" width="27.3" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="saira_semibold" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="saira_semibold" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -178,17 +222,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="210.0" height="116">
-                                <Font family="jetbrains_mono_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="jetbrains_mono_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="270.0" y="0" width="210.0" height="116">
-                                <Font family="jetbrains_mono_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="jetbrains_mono_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="210.0" y="118" width="60.0" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="jetbrains_mono_semibold" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="jetbrains_mono_semibold" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -199,17 +250,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="230.6" height="116">
-                                <Font family="bebas_neue_regular" size="100" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="bebas_neue_regular" size="100" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="249.4" y="0" width="230.6" height="116">
-                                <Font family="bebas_neue_regular" size="100" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="bebas_neue_regular" size="100" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="230.6" y="118" width="18.8" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="bebas_neue_regular" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="bebas_neue_regular" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -220,17 +278,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="225.9" height="116">
-                                <Font family="playfair_display_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.015" />
+                                <Font family="playfair_display_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.015">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="254.1" y="0" width="225.9" height="116">
-                                <Font family="playfair_display_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.015" />
+                                <Font family="playfair_display_semibold" size="100" color="#ffF2F2F0" letterSpacing="-0.015">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="225.9" y="118" width="28.2" height="116">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="playfair_display_semibold" size="100" color="#ff8C8F93">:</Font>
+                                <Font family="playfair_display_semibold" size="100" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -241,20 +306,28 @@
             <PartDraw name="slot2_arc" x="0" y="0" width="480" height="480">
                 <Arc centerX="240" centerY="240" width="392" height="392"
                      startAngle="240" endAngle="300" direction="CLOCKWISE">
-                    <Stroke color="#ff2A2D31" width="8" />
+                    <Stroke color="#ff2A2D31" width="8">
+                        <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                    </Stroke>
                 </Arc>
                 <Arc centerX="240" centerY="240" width="392" height="392"
                      startAngle="240" endAngle="240" direction="CLOCKWISE">
                     <Transform target="endAngle" value="240 + 60 * clamp([STEP_PERCENT] / 100, 0, 1)" />
-                    <Stroke color="#ff4A9EDB" width="8" />
+                    <Stroke color="#ff4A9EDB" width="8">
+                        <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                    </Stroke>
                 </Arc>
             </PartDraw>
             <PartText name="slot2_readout" x="0" y="0" width="480" height="480">
                 <TextCircular centerX="240" centerY="240" width="352" height="352"
                               startAngle="235" endAngle="305" direction="CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">STEPS </Font>
+                    <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>STEPS </Template>
+                    </Font>
                     <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Template>%d<Parameter expression="[STEP_COUNT]" /></Template>
                     </Font>
                 </TextCircular>
@@ -271,7 +344,9 @@
                         <PartDraw x="0" y="0" width="480" height="480">
                             <Arc centerX="240" centerY="240" width="392" height="392"
                                  startAngle="60" endAngle="120" direction="CLOCKWISE">
-                                <Stroke color="#ff2A2D31" width="8" />
+                                <Stroke color="#ff2A2D31" width="8">
+                                    <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Stroke>
                             </Arc>
                             <Arc centerX="240" centerY="240" width="392" height="392"
                                  startAngle="60" endAngle="60" direction="CLOCKWISE">
@@ -283,7 +358,10 @@
                             <TextCircular centerX="240" centerY="240" width="352" height="352"
                                           startAngle="55" endAngle="125" direction="CLOCKWISE"
                                           align="CENTER" verticalAlign="CENTER">
-                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
+                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>BATT </Template>
+                                </Font>
                                 <Font family="archivo_bold" size="19" color="#ffE0A33A">
                                     <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
                                 </Font>
@@ -296,20 +374,28 @@
                         <PartDraw x="0" y="0" width="480" height="480">
                             <Arc centerX="240" centerY="240" width="392" height="392"
                                  startAngle="60" endAngle="120" direction="CLOCKWISE">
-                                <Stroke color="#ff2A2D31" width="8" />
+                                <Stroke color="#ff2A2D31" width="8">
+                                    <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Stroke>
                             </Arc>
                             <Arc centerX="240" centerY="240" width="392" height="392"
                                  startAngle="60" endAngle="60" direction="CLOCKWISE">
                                 <Transform target="endAngle" value="60 + 60 * clamp([BATTERY_PERCENT] / 100, 0, 1)" />
-                                <Stroke color="#ff4A9EDB" width="8" />
+                                <Stroke color="#ff4A9EDB" width="8">
+                                    <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Stroke>
                             </Arc>
                         </PartDraw>
                         <PartText x="0" y="0" width="480" height="480">
                             <TextCircular centerX="240" centerY="240" width="352" height="352"
                                           startAngle="55" endAngle="125" direction="CLOCKWISE"
                                           align="CENTER" verticalAlign="CENTER">
-                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">BATT </Font>
+                                <Font family="archivo_medium" size="13" color="#ff8C8F93" letterSpacing="0.108">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>BATT </Template>
+                                </Font>
                                 <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                     <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
                                 </Font>
                             </TextCircular>
@@ -327,8 +413,12 @@
                         <TextCircular centerX="240" centerY="240" width="396" height="396"
                                       startAngle="290" endAngle="340" direction="CLOCKWISE"
                                       align="CENTER" verticalAlign="CENTER">
-                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">ALM </Font>
+                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">
+                                <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>ALM </Template>
+                            </Font>
                             <Font family="archivo_bold" size="14" color="#ffF2F2F0">
+                                <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                             </Font>
                         </TextCircular>
@@ -345,8 +435,12 @@
                         <TextCircular centerX="240" centerY="240" width="396" height="396"
                                       startAngle="20" endAngle="70" direction="CLOCKWISE"
                                       align="CENTER" verticalAlign="CENTER">
-                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">TMR </Font>
+                            <Font family="archivo_semibold" size="12" color="#ff8C8F93" letterSpacing="0.133">
+                                <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>TMR </Template>
+                            </Font>
                             <Font family="archivo_bold" size="14" color="#ffF2F2F0">
+                                <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                             </Font>
                         </TextCircular>
@@ -370,9 +464,11 @@
                     <Compare expression="wx1_clear">
                         <Group name="wx1_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -380,9 +476,11 @@
                     <Compare expression="wx1_partly">
                         <Group name="wx1_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -390,9 +488,11 @@
                     <Compare expression="wx1_rain">
                         <Group name="wx1_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -400,9 +500,11 @@
                     <Default>
                         <Group name="wx1_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="163" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -411,6 +513,7 @@
                 <PartText x="157" y="276" width="38" height="22">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -418,6 +521,7 @@
                 <PartText x="157" y="298" width="38" height="14">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d<Parameter expression="([HOUR_0_23] + 1) % 24" /></Template>
                         </Font>
                     </Text>
@@ -432,9 +536,11 @@
                     <Compare expression="wx2_clear">
                         <Group name="wx2_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -442,9 +548,11 @@
                     <Compare expression="wx2_partly">
                         <Group name="wx2_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -452,9 +560,11 @@
                     <Compare expression="wx2_rain">
                         <Group name="wx2_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -462,9 +572,11 @@
                     <Default>
                         <Group name="wx2_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="227" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -473,6 +585,7 @@
                 <PartText x="221" y="276" width="38" height="22">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -480,6 +593,7 @@
                 <PartText x="221" y="298" width="38" height="14">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d<Parameter expression="([HOUR_0_23] + 2) % 24" /></Template>
                         </Font>
                     </Text>
@@ -494,9 +608,11 @@
                     <Compare expression="wx3_clear">
                         <Group name="wx3_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -504,9 +620,11 @@
                     <Compare expression="wx3_partly">
                         <Group name="wx3_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -514,9 +632,11 @@
                     <Compare expression="wx3_rain">
                         <Group name="wx3_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -524,9 +644,11 @@
                     <Default>
                         <Group name="wx3_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="291" y="248" width="26" height="26" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -535,6 +657,7 @@
                 <PartText x="285" y="276" width="38" height="22">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -542,6 +665,7 @@
                 <PartText x="285" y="298" width="38" height="14">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_medium" size="11" color="#ff8C8F93" letterSpacing="0.1">
+                            <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d<Parameter expression="([HOUR_0_23] + 3) % 24" /></Template>
                         </Font>
                     </Text>
@@ -580,11 +704,13 @@
                                 <PartText x="0" y="9" width="240" height="26">
                                     <Text align="CENTER" verticalAlign="CENTER">
                                         <Font family="archivo_medium" size="14" color="#ff8C8F93" letterSpacing="0.14">
+                                            <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                             <Upper>
                                                 <Template>%s <Parameter expression="[COMPLICATION.TITLE]" /></Template>
                                             </Upper>
                                         </Font>
                                         <Font family="archivo_bold" size="19" color="#ffF2F2F0">
+                                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                             <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                                         </Font>
                                     </Text>
@@ -596,11 +722,14 @@
                         <PartDraw name="slot7_border" x="0" y="0" width="480" height="480">
                             <RoundRectangle x="216" y="366" width="48" height="48"
                                             cornerRadiusX="14" cornerRadiusY="14">
-                                <Stroke color="#ff2A2D31" width="1" />
+                                <Stroke color="#ff2A2D31" width="1">
+                                    <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Stroke>
                             </RoundRectangle>
                         </PartDraw>
                         <PartImage name="slot7_glyph" x="214" y="364" width="52" height="52"
                                    tintColor="#ff4A9EDB">
+                            <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Image resource="tile_wallet" />
                             <Launch target="https://pay.google.com/" />
                         </PartImage>
@@ -640,20 +769,26 @@
 
                 <!-- ==== chrome, identical to Layout A (section 2) ==== -->
                 <PartImage x="0" y="0" width="480" height="480" tintColor="#ff3E4247">
+                    <Transform target="tintColor" value="extractColorFromColors(&quot;3E4247 2A3A24 453C30 35342F 1E2124&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                     <Image resource="track_minute" />
                 </PartImage>
                 <PartImage x="0" y="0" width="480" height="480" tintColor="#ff6A6E73">
+                    <Transform target="tintColor" value="extractColorFromColors(&quot;6A6E73 4E6644 70624E 5A5850 3A3E41&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                     <Image resource="track_hour" />
                 </PartImage>
                 <PartDraw x="0" y="0" width="480" height="480">
                     <Rectangle x="239" y="10" width="2" height="22">
-                        <Fill color="#ff4A9EDB" />
+                        <Fill color="#ff4A9EDB">
+                            <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        </Fill>
                     </Rectangle>
                 </PartDraw>
                 <PartDraw x="0" y="0" width="480" height="480" pivotX="0.5" pivotY="0.5" angle="0">
                     <Transform target="angle" value="[SECOND] * 6" />
                     <Ellipse centerX="240" centerY="18" width="8" height="8">
-                        <Fill color="#ff4A9EDB" />
+                        <Fill color="#ff4A9EDB">
+                            <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        </Fill>
                     </Ellipse>
                 </PartDraw>
 
@@ -661,6 +796,7 @@
                 <PartText x="0" y="130" width="480" height="28">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_semibold" size="21" color="#ffF2F2F0" letterSpacing="0.16">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Upper>
                                 <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
                             </Upper>
@@ -684,17 +820,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="223.9" height="109">
-                                <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04" />
+                                <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="256.1" y="0" width="223.9" height="109">
-                                <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04" />
+                                <Font family="archivo_bold" size="96" color="#ffF2F2F0" letterSpacing="-0.04">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="223.9" y="162" width="32.2" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="archivo_bold" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="archivo_bold" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -705,17 +848,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="228.8" height="109">
-                                <Font family="barlow_condensed_medium" size="96" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="barlow_condensed_medium" size="96" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="251.2" y="0" width="228.8" height="109">
-                                <Font family="barlow_condensed_medium" size="96" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="barlow_condensed_medium" size="96" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="228.8" y="162" width="22.5" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="barlow_condensed_medium" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="barlow_condensed_medium" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -726,17 +876,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="226.9" height="109">
-                                <Font family="saira_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="saira_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="253.1" y="0" width="226.9" height="109">
-                                <Font family="saira_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="saira_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="226.9" y="162" width="26.2" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="saira_semibold" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="saira_semibold" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -747,17 +904,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="211.2" height="109">
-                                <Font family="jetbrains_mono_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="jetbrains_mono_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="268.8" y="0" width="211.2" height="109">
-                                <Font family="jetbrains_mono_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02" />
+                                <Font family="jetbrains_mono_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.02">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="211.2" y="162" width="57.6" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="jetbrains_mono_semibold" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="jetbrains_mono_semibold" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -768,17 +932,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="231.0" height="109">
-                                <Font family="bebas_neue_regular" size="96" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="bebas_neue_regular" size="96" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="249.0" y="0" width="231.0" height="109">
-                                <Font family="bebas_neue_regular" size="96" color="#ffF2F2F0" letterSpacing="0.01" />
+                                <Font family="bebas_neue_regular" size="96" color="#ffF2F2F0" letterSpacing="0.01">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="231.0" y="162" width="18.0" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="bebas_neue_regular" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="bebas_neue_regular" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -789,17 +960,24 @@
                             <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                       align="END" verticalAlign="CENTER"
                                       x="0" y="0" width="226.5" height="109">
-                                <Font family="playfair_display_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.015" />
+                                <Font family="playfair_display_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.015">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                             <TimeText format="mm"
                                       align="START" verticalAlign="CENTER"
                                       x="253.5" y="0" width="226.5" height="109">
-                                <Font family="playfair_display_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.015" />
+                                <Font family="playfair_display_semibold" size="96" color="#ffF2F2F0" letterSpacing="-0.015">
+                                    <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                </Font>
                             </TimeText>
                         </DigitalClock>
                         <PartText x="226.5" y="162" width="27.1" height="109">
                             <Text align="CENTER" verticalAlign="CENTER">
-                                <Font family="playfair_display_semibold" size="96" color="#ff8C8F93">:</Font>
+                                <Font family="playfair_display_semibold" size="96" color="#ff8C8F93">
+                                    <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    <Template>:</Template>
+                                </Font>
                             </Text>
                         </PartText>
                     </Group>
@@ -811,8 +989,12 @@
                 <TextCircular centerX="240" centerY="240" width="396" height="396"
                               startAngle="290" endAngle="340" direction="CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">STP </Font>
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>STP </Template>
+                    </Font>
                     <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Template>%d<Parameter expression="[STEP_COUNT]" /></Template>
                     </Font>
                 </TextCircular>
@@ -829,7 +1011,10 @@
                 <TextCircular centerX="240" centerY="240" width="396" height="396"
                               startAngle="20" endAngle="70" direction="CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">BAT </Font>
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>BAT </Template>
+                    </Font>
                     <Font family="archivo_bold" size="16" color="#ffE0A33A">
                         <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
                     </Font>
@@ -841,8 +1026,12 @@
                 <TextCircular centerX="240" centerY="240" width="396" height="396"
                               startAngle="20" endAngle="70" direction="CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">BAT </Font>
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>BAT </Template>
+                    </Font>
                     <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Template>%d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
                     </Font>
                 </TextCircular>
@@ -859,8 +1048,12 @@
                 <TextCircular centerX="240" centerY="240" width="396" height="396"
                               startAngle="250" endAngle="200" direction="COUNTER_CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">ALM </Font>
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>ALM </Template>
+                    </Font>
                     <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                     </Font>
                 </TextCircular>
@@ -877,8 +1070,12 @@
                 <TextCircular centerX="240" centerY="240" width="396" height="396"
                               startAngle="160" endAngle="110" direction="COUNTER_CLOCKWISE"
                               align="CENTER" verticalAlign="CENTER">
-                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">TMR </Font>
+                    <Font family="archivo_semibold" size="13" color="#ff8C8F93" letterSpacing="0.123">
+                        <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                        <Template>TMR </Template>
+                    </Font>
                     <Font family="archivo_bold" size="16" color="#ffF2F2F0">
+                        <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                         <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                     </Font>
                 </TextCircular>
@@ -897,9 +1094,11 @@
                     <Compare expression="cwx1_clear">
                         <Group name="cwx1_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -907,9 +1106,11 @@
                     <Compare expression="cwx1_partly">
                         <Group name="cwx1_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -917,9 +1118,11 @@
                     <Compare expression="cwx1_rain">
                         <Group name="cwx1_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -927,9 +1130,11 @@
                     <Default>
                         <Group name="cwx1_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="178" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -938,6 +1143,7 @@
                 <PartText x="174" y="306" width="28" height="20">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.1.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -951,9 +1157,11 @@
                     <Compare expression="cwx2_clear">
                         <Group name="cwx2_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -961,9 +1169,11 @@
                     <Compare expression="cwx2_partly">
                         <Group name="cwx2_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -971,9 +1181,11 @@
                     <Compare expression="cwx2_rain">
                         <Group name="cwx2_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -981,9 +1193,11 @@
                     <Default>
                         <Group name="cwx2_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="230" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -992,6 +1206,7 @@
                 <PartText x="226" y="306" width="28" height="20">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.2.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -1005,9 +1220,11 @@
                     <Compare expression="cwx3_clear">
                         <Group name="cwx3_clear_g" x="0" y="0" width="480" height="480">
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_i" />
                             </PartImage>
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_clear_a" />
                             </PartImage>
                         </Group>
@@ -1015,9 +1232,11 @@
                     <Compare expression="cwx3_partly">
                         <Group name="cwx3_partly_g" x="0" y="0" width="480" height="480">
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_i" />
                             </PartImage>
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_partly_a" />
                             </PartImage>
                         </Group>
@@ -1025,9 +1244,11 @@
                     <Compare expression="cwx3_rain">
                         <Group name="cwx3_rain_g" x="0" y="0" width="480" height="480">
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_i" />
                             </PartImage>
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_rain_a" />
                             </PartImage>
                         </Group>
@@ -1035,9 +1256,11 @@
                     <Default>
                         <Group name="cwx3_cloudy_g" x="0" y="0" width="480" height="480">
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ffF2F2F0">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_i" />
                             </PartImage>
                             <PartImage x="282" y="284" width="20" height="20" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="wx_cloudy_a" />
                             </PartImage>
                         </Group>
@@ -1046,6 +1269,7 @@
                 <PartText x="278" y="306" width="28" height="20">
                     <Text align="CENTER" verticalAlign="CENTER">
                         <Font family="archivo_bold" size="15" color="#ffF2F2F0">
+                            <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                             <Template>%d&#176;<Parameter expression="[WEATHER.HOURS.3.TEMPERATURE]" /></Template>
                         </Font>
                     </Text>
@@ -1075,11 +1299,13 @@
                                     <PartText x="0" y="9" width="240" height="26">
                                         <Text align="CENTER" verticalAlign="CENTER">
                                             <Font family="archivo_medium" size="12" color="#ff8C8F93" letterSpacing="0.14">
+                                                <Transform target="color" value="extractColorFromColors(&quot;8C8F93 8AA283 A29684 B4AEA0 65686B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                                 <Upper>
                                                     <Template>%s <Parameter expression="[COMPLICATION.TITLE]" /></Template>
                                                 </Upper>
                                             </Font>
                                             <Font family="archivo_bold" size="17" color="#ffF2F2F0">
+                                                <Transform target="color" value="extractColorFromColors(&quot;F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                                 <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
                                             </Font>
                                         </Text>
@@ -1089,10 +1315,13 @@
                             <PartDraw x="0" y="0" width="480" height="480">
                                 <RoundRectangle x="216" y="358" width="48" height="48"
                                                 cornerRadiusX="14" cornerRadiusY="14">
-                                    <Stroke color="#ff2A2D31" width="1" />
+                                    <Stroke color="#ff2A2D31" width="1">
+                                        <Transform target="color" value="extractColorFromColors(&quot;2A2D31 1E2A1A 332C24 2A2926 16181A&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                    </Stroke>
                                 </RoundRectangle>
                             </PartDraw>
                             <PartImage x="214" y="356" width="52" height="52" tintColor="#ff4A9EDB">
+                                <Transform target="tintColor" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Image resource="tile_wallet" />
                                 <Launch target="https://pay.google.com/" />
                             </PartImage>
@@ -1147,12 +1376,15 @@
                     <PartDraw x="0" y="0" width="480" height="480">
                         <RoundRectangle x="140" y="412" width="200" height="29"
                                         cornerRadiusX="14.5" cornerRadiusY="14.5">
-                            <Stroke color="#ff4A9EDB" width="1" />
+                            <Stroke color="#ff4A9EDB" width="1">
+                                <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Stroke>
                         </RoundRectangle>
                     </PartDraw>
                     <PartText x="140" y="412" width="200" height="29">
                         <Text align="CENTER" verticalAlign="CENTER">
                             <Font family="archivo_semibold" size="13" color="#ff4A9EDB" letterSpacing="0.14">
+                                <Transform target="color" value="extractColorFromColors(&quot;4A9EDB E0A33A D6B25E E0623A EDEFF1&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                                 <Template>CHARGING &#183; %d%%<Parameter expression="[BATTERY_PERCENT]" /></Template>
                             </Font>
                         </Text>
@@ -1187,17 +1419,21 @@
         <Variant mode="AMBIENT" target="alpha" value="255" />
 
         <PartImage x="0" y="0" width="480" height="480" tintColor="#ff5E6165">
+            <Transform target="tintColor" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
             <Image resource="track_hour" />
         </PartImage>
         <PartDraw x="0" y="0" width="480" height="480">
             <Rectangle x="239" y="10" width="2" height="22">
-                <Fill color="#ff5E6165" />
+                <Fill color="#ff5E6165">
+                    <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                </Fill>
             </Rectangle>
         </PartDraw>
 
         <PartText x="0" y="128" width="480" height="28">
             <Text align="CENTER" verticalAlign="CENTER">
                 <Font family="archivo_semibold" size="22" color="#ff8E9195" letterSpacing="0.16">
+                    <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                     <Upper>
                         <Template>%s %s<Parameter expression="[DAY_OF_WEEK_F]" /><Parameter expression="[DAY]" /></Template>
                     </Upper>
@@ -1219,17 +1455,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="222.6" height="120">
-                            <Font family="archivo_bold" size="104" color="#ff8E9195" letterSpacing="-0.04" />
+                            <Font family="archivo_bold" size="104" color="#ff8E9195" letterSpacing="-0.04">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="257.4" y="0" width="222.6" height="120">
-                            <Font family="archivo_bold" size="104" color="#ff8E9195" letterSpacing="-0.04" />
+                            <Font family="archivo_bold" size="104" color="#ff8E9195" letterSpacing="-0.04">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="222.6" y="160" width="34.8" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="archivo_bold" size="104" color="#ff5E6165">:</Font>
+                            <Font family="archivo_bold" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1240,17 +1483,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="227.8" height="120">
-                            <Font family="barlow_condensed_medium" size="104" color="#ff8E9195" letterSpacing="0.01" />
+                            <Font family="barlow_condensed_medium" size="104" color="#ff8E9195" letterSpacing="0.01">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="252.2" y="0" width="227.8" height="120">
-                            <Font family="barlow_condensed_medium" size="104" color="#ff8E9195" letterSpacing="0.01" />
+                            <Font family="barlow_condensed_medium" size="104" color="#ff8E9195" letterSpacing="0.01">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="227.8" y="160" width="24.3" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="barlow_condensed_medium" size="104" color="#ff5E6165">:</Font>
+                            <Font family="barlow_condensed_medium" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1261,17 +1511,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="225.8" height="120">
-                            <Font family="saira_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02" />
+                            <Font family="saira_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="254.2" y="0" width="225.8" height="120">
-                            <Font family="saira_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02" />
+                            <Font family="saira_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="225.8" y="160" width="28.4" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="saira_semibold" size="104" color="#ff5E6165">:</Font>
+                            <Font family="saira_semibold" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1282,17 +1539,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="208.8" height="120">
-                            <Font family="jetbrains_mono_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02" />
+                            <Font family="jetbrains_mono_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="271.2" y="0" width="208.8" height="120">
-                            <Font family="jetbrains_mono_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02" />
+                            <Font family="jetbrains_mono_semibold" size="104" color="#ff8E9195" letterSpacing="-0.02">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="208.8" y="160" width="62.4" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="jetbrains_mono_semibold" size="104" color="#ff5E6165">:</Font>
+                            <Font family="jetbrains_mono_semibold" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1303,17 +1567,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="230.2" height="120">
-                            <Font family="bebas_neue_regular" size="104" color="#ff8E9195" letterSpacing="0.01" />
+                            <Font family="bebas_neue_regular" size="104" color="#ff8E9195" letterSpacing="0.01">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="249.8" y="0" width="230.2" height="120">
-                            <Font family="bebas_neue_regular" size="104" color="#ff8E9195" letterSpacing="0.01" />
+                            <Font family="bebas_neue_regular" size="104" color="#ff8E9195" letterSpacing="0.01">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="230.2" y="160" width="19.6" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="bebas_neue_regular" size="104" color="#ff5E6165">:</Font>
+                            <Font family="bebas_neue_regular" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1324,17 +1595,24 @@
                         <TimeText format="hh" hourFormat="SYNC_TO_DEVICE"
                                   align="END" verticalAlign="CENTER"
                                   x="0" y="0" width="225.3" height="120">
-                            <Font family="playfair_display_semibold" size="104" color="#ff8E9195" letterSpacing="-0.015" />
+                            <Font family="playfair_display_semibold" size="104" color="#ff8E9195" letterSpacing="-0.015">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                         <TimeText format="mm"
                                   align="START" verticalAlign="CENTER"
                                   x="254.7" y="0" width="225.3" height="120">
-                            <Font family="playfair_display_semibold" size="104" color="#ff8E9195" letterSpacing="-0.015" />
+                            <Font family="playfair_display_semibold" size="104" color="#ff8E9195" letterSpacing="-0.015">
+                                <Transform target="color" value="extractColorFromColors(&quot;8E9195 8BA284 9C9080 A29C90 8A8D90&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                            </Font>
                         </TimeText>
                     </DigitalClock>
                     <PartText x="225.3" y="160" width="29.3" height="120">
                         <Text align="CENTER" verticalAlign="CENTER">
-                            <Font family="playfair_display_semibold" size="104" color="#ff5E6165">:</Font>
+                            <Font family="playfair_display_semibold" size="104" color="#ff5E6165">
+                                <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
+                                <Template>:</Template>
+                            </Font>
                         </Text>
                     </PartText>
                 </Group>
@@ -1344,6 +1622,7 @@
         <PartText x="0" y="300" width="480" height="26">
             <Text align="CENTER" verticalAlign="CENTER">
                 <Font family="archivo_medium" size="20" color="#ff5E6165" letterSpacing="0.14">
+                    <Transform target="color" value="extractColorFromColors(&quot;5E6165 5C7256 6A6052 6E6A60 55585B&quot;, false, (([CONFIGURATION.style] == &quot;mission&quot; ? 1 : [CONFIGURATION.style] == &quot;editorial&quot; ? 2 : [CONFIGURATION.style] == &quot;bauhaus&quot; ? 3 : [CONFIGURATION.style] == &quot;stealth&quot; ? 4 : 0) * 2 + 1) / 10)" />
                     <Template>%d%% &#183; %d STEPS<Parameter expression="[BATTERY_PERCENT]" /><Parameter expression="[STEP_COUNT]" /></Template>
                 </Font>
             </Text>

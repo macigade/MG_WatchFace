@@ -7,6 +7,7 @@ from fontTools.ttLib import TTFont
 WF="watchface/src/main/res/raw/watchface.xml"
 FD="watchface/src/main/res/font"; DD="watchface/src/main/res/drawable-nodpi"
 SF="watchface/src/main/res/values/strings.xml"
+MF="watchface/src/main/AndroidManifest.xml"
 rows=[]; FAIL=[]; UNK=[]
 def chk(n, ok, det=""):
     t="PASS" if ok is True else ("FAIL" if ok is False else "UNKNOWN")
@@ -59,8 +60,11 @@ chk("all attributes traced to WFF reference docs", not ba, str(ba))
 # ---------- configuration wiring ----------
 uc=root.find("UserConfigurations")
 ucs={c.get("id"):c for c in uc.findall("ListConfiguration")}
-chk("UserConfigurations declares layout and numerals",
-    set(ucs)=={"layout","numerals"}, str(sorted(ucs)))
+chk("UserConfigurations declares layout, style and numerals",
+    set(ucs)=={"layout","style","numerals"}, str(sorted(ucs)))
+chk("style: five palettes in HANDOFF section 3 column order",
+    [o.get("id") for o in ucs["style"]]==["swiss","mission","editorial","bauhaus","stealth"],
+    str([o.get("id") for o in ucs["style"]]))
 scl=[e for e in root.find("Scene") if e.tag=="ListConfiguration"][0]
 chk("Scene ListConfiguration is the layout selector", scl.get("id")=="layout", scl.get("id"))
 chk("layout: declared options == used options",
@@ -208,7 +212,9 @@ def mids(g):
     out={}
     for t in g.iter("TextCircular"):
         r=float(t.get("width"))/2; s,e=float(t.get("startAngle")),float(t.get("endAngle"))
-        lbl=(list(t.iter("Font"))[0].text or "").strip()
+        f0=list(t.iter("Font"))[0]
+        tmpl=f0.find("Template")
+        lbl=((f0.text or "") if tmpl is None else (tmpl.text or "")).strip()
         out.setdefault(lbl,(r,(s+e)/2 % 360, t.get("direction")))
     return out
 ma, mc = mids(A), mids(Cc)
@@ -237,6 +243,44 @@ sa={c.get("slotId") for c in A.iter("ComplicationSlot")}
 sc={c.get("slotId") for c in Cc.iter("ComplicationSlot")}
 chk("both layouts expose the same slot ids so assignments survive a switch",
     sa==sc=={"4","5","6"}, f"A={sorted(sa)} C={sorted(sc)}")
+
+# ---------- palette: every colour driven by [CONFIGURATION.style] ----------
+PAL={"bg":"0A0A0B 060806 0B0A08 111110 000000",
+     "ink":"F2F2F0 DCE8D4 F6F0E6 F8F5ED CDD0D3",
+     "dim":"8C8F93 8AA283 A29684 B4AEA0 65686B",
+     "track":"2A2D31 1E2A1A 332C24 2A2926 16181A",
+     "tick":"3E4247 2A3A24 453C30 35342F 1E2124",
+     "tickhour":"6A6E73 4E6644 70624E 5A5850 3A3E41",
+     "accent":"4A9EDB E0A33A D6B25E E0623A EDEFF1",
+     "aodink":"8E9195 8BA284 9C9080 A29C90 8A8D90",
+     "aoddim":"5E6165 5C7256 6A6052 6E6A60 55585B"}
+LIT={"#ff0A0A0B":"bg","#ffF2F2F0":"ink","#ff8C8F93":"dim","#ff2A2D31":"track",
+     "#ff3E4247":"tick","#ff6A6E73":"tickhour","#ff4A9EDB":"accent",
+     "#ff8E9195":"aodink","#ff5E6165":"aoddim"}
+CONST={"#ffE0A33A","#00000000"}     # low-power warning, and transparent tap fills
+chk("manifest declares Watch Face Format 4",
+    re.search(r'format\.version"\s*\n\s*android:value="(\d+)"', open(MF).read()).group(1)=="4")
+chk("palette strings match the HANDOFF section 3 table",
+    all(f'&quot;{v}&quot;' in src.replace("&amp;","&") or v in src for v in PAL.values()),
+    str([k for k,v in PAL.items() if v not in src]))
+untheme=[]; wrong=[]
+for e in root.iter():
+    for attr in ("color","tintColor","backgroundColor"):
+        lit=e.get(attr)
+        if not lit or not lit.startswith("#"): continue
+        if lit in CONST: continue
+        tf=[t for t in e.findall("Transform") if t.get("target")==attr]
+        if not tf: untheme.append(f"{e.tag}@{attr}={lit}"); continue
+        want=PAL[LIT[lit]]
+        if want not in tf[0].get("value"): wrong.append(f"{e.tag}@{attr}={lit}")
+chk("every themed colour carries a Transform on its own attribute", not untheme, str(untheme[:6]))
+chk("every Transform uses the palette row matching its Swiss literal", not wrong, str(wrong[:6]))
+nxf=len(root.findall(".//Transform"))
+geo=[t for t in root.iter("Transform") if "extractColorFromColors" not in (t.get("value") or "")]
+chk("every Transform is either a palette lookup or one of the five geometry ones",
+    len(re.findall("extractColorFromColors", src))+len(geo)==nxf and
+    sorted(t.get("target") for t in geo)==["angle","angle","endAngle","endAngle","endAngle"],
+    f"{nxf} total, geometry {sorted(t.get('target') for t in geo)}")
 
 # ---------- palette ----------
 TOK={"#ff0A0A0B","#ffF2F2F0","#ff8C8F93","#ff2A2D31","#ff3E4247","#ff6A6E73","#ff4A9EDB",
