@@ -6,4 +6,13 @@
     <string name="cfg_layout">Layout</string>
     <string name="cfg_layout_a">Instrument</string>
     <string name="cfg_layout_c">Orbit</string>
+
+    <!-- watch face editor: numeral selector -->
+    <string name="cfg_numerals">Numerals</string>
+    <string name="cfg_num_archivo">Archivo</string>
+    <string name="cfg_num_barlow">Barlow Condensed</string>
+    <string name="cfg_num_saira">Saira</string>
+    <string name="cfg_num_jet">JetBrains Mono</string>
+    <string name="cfg_num_bebas">Bebas Neue</string>
+    <string name="cfg_num_playfair">Playfair Display</string>
 </resources>

@@ -57,18 +57,31 @@ chk("all elements traced to WFF reference docs", not be, str(be))
 chk("all attributes traced to WFF reference docs", not ba, str(ba))
 
 # ---------- configuration wiring ----------
-uc=root.find("UserConfigurations"); ucl=uc.find("ListConfiguration")
+uc=root.find("UserConfigurations")
+ucs={c.get("id"):c for c in uc.findall("ListConfiguration")}
+chk("UserConfigurations declares layout and numerals",
+    set(ucs)=={"layout","numerals"}, str(sorted(ucs)))
 scl=[e for e in root.find("Scene") if e.tag=="ListConfiguration"][0]
-chk("Scene ListConfiguration id matches UserConfigurations",
-    ucl.get("id")==scl.get("id")=="layout", f"{ucl.get('id')} / {scl.get('id')}")
-dec=[o.get("id") for o in ucl]; use=[o.get("id") for o in scl]
-chk("declared options == used options", dec==use==["a","c"], f"{dec} vs {use}")
-chk("defaultValue is a declared option", ucl.get("defaultValue") in dec, ucl.get("defaultValue"))
-ms=[v for e in (ucl, *ucl) for k,v in e.attrib.items()
+chk("Scene ListConfiguration is the layout selector", scl.get("id")=="layout", scl.get("id"))
+chk("layout: declared options == used options",
+    [o.get("id") for o in ucs["layout"]]==[o.get("id") for o in scl]==["a","c"])
+chk("numerals: six options in HANDOFF section 3 order",
+    [o.get("id") for o in ucs["numerals"]]==["archivo","barlow","saira","jet","bebas","playfair"],
+    str([o.get("id") for o in ucs["numerals"]]))
+chk("every defaultValue is a declared option",
+    all(c.get("defaultValue") in [o.get("id") for o in c] for c in ucs.values()),
+    str({k:v.get("defaultValue") for k,v in ucs.items()}))
+ms=[v for c in ucs.values() for e in (c,*c) for k,v in e.attrib.items()
     if k in ("displayName","screenReaderText") and v not in strings]
-chk("all editor displayName/screenReaderText resolve in strings.xml", not ms, str(sorted(set(ms))))
-mi=[e.get("icon") for e in (ucl,*ucl) if e.get("icon") and not os.path.exists(f"{DD}/{e.get('icon')}.png")]
+chk("all editor labels resolve in strings.xml", not ms, str(sorted(set(ms))))
+mi=[e.get("icon") for c in ucs.values() for e in (c,*c)
+    if e.get("icon") and not os.path.exists(f"{DD}/{e.get('icon')}.png")]
 chk("all ListOption icons exist as drawables", not mi, str(mi))
+# every numerals option must be reachable from an expression in the scene
+cfgref=set(re.findall(r'\[CONFIGURATION\.numerals\] == "(\w+)"', src))
+opts={o.get("id") for o in ucs["numerals"]}
+chk("five numerals options branch by expression, the sixth is the Default",
+    cfgref==opts-{"playfair"}, f"branched={sorted(cfgref)} declared={sorted(opts)}")
 
 # ---------- resources ----------
 imgs=sorted({e.get("resource") for e in root.iter("Image")})
@@ -83,7 +96,7 @@ for n,w in {"archivo_medium":500,"archivo_semibold":600,"archivo_bold":700}.item
     t=TTFont(f"{FD}/{n}.ttf", lazy=True)
     if t['OS/2'].usWeightClass!=w: bad.append(f"{n}={t['OS/2'].usWeightClass}")
     if t.sfntVersion not in ("\x00\x01\x00\x00","true"): bad.append(f"{n} not TTF")
-chk("Archivo 500/600/700 correct weight and real TTF", not bad, str(bad))
+chk("Archivo UI weights 500/600/700 correct and real TTF", not bad, str(bad))
 
 # ---------- data sources ----------
 VER={"BATTERY_PERCENT","BATTERY_IS_LOW","BATTERY_CHARGING_STATUS","STEP_COUNT","STEP_PERCENT",
@@ -115,15 +128,42 @@ rr=[f"r={float(e.get('width'))/2}" for e in root.iter("TextCircular") if float(e
 chk("curved text radius <= 200 (section 2 safe circle)", not rr, str(rr))
 
 # HANDOFF section 5 / 6 exact values
-def clock(g):
-    dc=g.find(".//DigitalClock") if g.find(".//DigitalClock") is not None else list(g.iter("DigitalClock"))[0]
-    tt=list(dc.iter("TimeText"))[0]; f=list(tt.iter("Font"))[0]
-    return box(dc), float(f.get("size"))
-(ab, asz), (cb, csz) = clock(A), clock(Cc)
-chk("A: time y 118, 100 px (section 5)", ab[1]==118 and asz==100, f"y={ab[1]} size={asz}")
-chk("C: time y 162, 96 px (section 6)", cb[1]==162 and csz==96, f"y={cb[1]} size={csz}")
-chk("A: time box height 116 (line-height 1.16)", ab[3]==116, str(ab[3]))
-chk("C: time box height 109 (line-height 1.14)", cb[3]==109, str(cb[3]))
+from fontTools.ttLib import TTFont as _TT
+NUM={"archivo":("archivo_bold",-0.04,700),"barlow":("barlow_condensed_medium",0.01,500),
+     "saira":("saira_semibold",-0.02,600),"jet":("jetbrains_mono_semibold",-0.02,600),
+     "bebas":("bebas_neue_regular",0.01,400),"playfair":("playfair_display_semibold",-0.015,600)}
+def clocks(g):
+    out=[]
+    for dc in g.iter("DigitalClock"):
+        tts=list(dc.iter("TimeText")); f=list(tts[0].iter("Font"))[0]
+        out.append((box(dc), float(f.get("size")), f.get("family"),
+                    float(f.get("letterSpacing")), box(tts[0]), box(tts[1])))
+    return out
+def colon_adv(fam,size):
+    t=_TT(f"{FD}/{fam}.ttf", lazy=True)
+    return t['hmtx'][t.getBestCmap()[ord(':')]][0]/t['head'].unitsPerEm*size
+for tag,g,y,h,size in (("A",A,118,116,100),("C",Cc,162,109,96),("AOD",grp("ambient"),160,120,104)):
+    cl=clocks(g)
+    chk(f"{tag}: six numeral variants of the clock", len(cl)==6, f"{len(cl)}")
+    chk(f"{tag}: every variant at y {y}, height {h}, size {size}",
+        all(b[1]==y and b[3]==h and sz==size for b,sz,*_ in cl),
+        str(sorted({(b[1],b[3],sz) for b,sz,*_ in cl})))
+    chk(f"{tag}: families and tracking match HANDOFF section 3",
+        {(fam,ls) for _,_,fam,ls,_,_ in cl}=={(v[0],v[1]) for v in NUM.values()},
+        str(sorted({(fam,ls) for _,_,fam,ls,_,_ in cl})))
+    bad=[]
+    for _,sz,fam,_,hh,mm in cl:
+        ca=colon_adv(fam,sz); want_end=round(240-ca/2,1); want_start=round(240+ca/2,1)
+        if abs(hh[0]+hh[2]-want_end)>0.05: bad.append(f"{fam} hh ends {hh[0]+hh[2]} want {want_end}")
+        if abs(mm[0]-want_start)>0.05: bad.append(f"{fam} mm starts {mm[0]} want {want_start}")
+        if abs((hh[0]+hh[2]+mm[0])/2-240)>0.05: bad.append(f"{fam} colon not centred on 240")
+    chk(f"{tag}: colon box is each font's own advance, centred on x 240", not bad, str(bad))
+bad=[]
+for sid,(fam,_,wt) in NUM.items():
+    t=_TT(f"{FD}/{fam}.ttf", lazy=True)
+    if t['OS/2'].usWeightClass!=wt: bad.append(f"{sid}={t['OS/2'].usWeightClass} want {wt}")
+    if any(ord(c) not in t.getBestCmap() for c in "0123456789:"): bad.append(f"{sid} missing glyphs")
+chk("all six numeral fonts carry 0-9 and : at the section 3 weight", not bad, str(bad))
 
 def strip_y(g, size):
     for pt in g.iter("PartText"):
@@ -157,6 +197,9 @@ chk("C: forecast icons 20 px at y 284", fc_y(Cc,20)==[284.0], str(fc_y(Cc,20)))
 aarc=[(float(a.get("startAngle")), float(a.get("width"))/2) for a in A.iter("Arc")]
 chk("A: arc gauges r 196, sweeps from 240 and 60",
     all(r==196 for _,r in aarc) and sorted({s for s,_ in aarc})==[60.0,240.0], str(aarc))
+chk("A: arc fill clamped 0-1 (section 5)",
+    len(re.findall(r'clamp\(\[(?:STEP|BATTERY)_PERCENT\] / 100, 0, 1\)', src))==3,
+    str(len(re.findall(r'clamp\(', src))))
 chk("C: no arc gauges - centre holds time only (section 6)", len(list(Cc.iter("Arc")))==0,
     f"{len(list(Cc.iter('Arc')))} arcs")
 
