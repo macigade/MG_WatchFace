@@ -88,7 +88,8 @@ chk("five numerals options branch by expression, the sixth is the Default",
     cfgref==opts-{"playfair"}, f"branched={sorted(cfgref)} declared={sorted(opts)}")
 
 # ---------- resources ----------
-imgs=sorted({e.get("resource") for e in root.iter("Image")})
+imgs=sorted({e.get("resource") for e in root.iter("Image")
+             if not e.get("resource","").startswith("[")})   # [COMPLICATION.*] are expressions
 chk(f"all {len(imgs)} Image resources exist",
     not [r for r in imgs if not os.path.exists(f"{DD}/{r}.png")],
     str([r for r in imgs if not os.path.exists(f"{DD}/{r}.png")]))
@@ -104,7 +105,10 @@ chk("Archivo UI weights 500/600/700 correct and real TTF", not bad, str(bad))
 
 # ---------- data sources ----------
 VER={"BATTERY_PERCENT","BATTERY_IS_LOW","BATTERY_CHARGING_STATUS","STEP_COUNT","STEP_PERCENT",
-     "DAY","DAY_OF_WEEK_F","SECOND","HOUR_0_23","COMPLICATION.TEXT","COMPLICATION.TITLE"}
+     "DAY","DAY_OF_WEEK_F","SECOND","HOUR_0_23","COMPLICATION.TEXT","COMPLICATION.TITLE",
+     "COMPLICATION.RANGED_VALUE_VALUE","COMPLICATION.RANGED_VALUE_MIN",
+     "COMPLICATION.RANGED_VALUE_MAX","COMPLICATION.MONOCHROMATIC_IMAGE",
+     "COMPLICATION.SMALL_IMAGE"}
 toks=set(re.findall(r'\[([A-Z0-9_.]+)\]', src)); wx={t for t in toks if t.startswith("WEATHER.")}
 chk("non-weather tokens verified in SourceType ref", toks-wx<=VER, f"unverified={sorted(toks-wx-VER)}")
 chk("weather tokens match WEATHER.HOURS.<1-8>.<FIELD>",
@@ -241,8 +245,43 @@ chk("every Launch sits on a bounded part of at least 44x44", not bad, str(bad))
 # ---------- slot parity (section 10) ----------
 sa={c.get("slotId") for c in A.iter("ComplicationSlot")}
 sc={c.get("slotId") for c in Cc.iter("ComplicationSlot")}
-chk("both layouts expose the same slot ids so assignments survive a switch",
-    sa==sc=={"4","5","6"}, f"A={sorted(sa)} C={sorted(sc)}")
+chk("all eight HANDOFF section 4 slots exist in both layouts",
+    sa==sc=={str(i) for i in range(8)}, f"A={sorted(sa)} C={sorted(sc)}")
+bad=[]
+for g,tag in ((A,"A"),(Cc,"C")):
+    for cs in g.iter("ComplicationSlot"):
+        sup=set(cs.get("supportedTypes").split())
+        have={x.get("type") for x in cs.findall("Complication")}
+        if not have <= sup: bad.append(f"{tag}{cs.get('slotId')} renders {have-sup} outside supportedTypes")
+        bb=cs.find("BoundingBox")
+        if bb is None: bad.append(f"{tag}{cs.get('slotId')} has no BoundingBox")
+        elif float(bb.get("width"))<44 or float(bb.get("height"))<44:
+            bad.append(f"{tag}{cs.get('slotId')} tap box under 44x44")
+chk("every slot declares the types it renders and a tap box of at least 44x44", not bad, str(bad))
+dp=[d.get("defaultSystemProvider") for g in (A,Cc) for d in g.iter("DefaultProviderPolicy")]
+chk("only slot 6 sets a default provider, and it is the verified SUNRISE_SUNSET",
+    dp==["SUNRISE_SUNSET","SUNRISE_SUNSET"], str(dp))
+def empty_src(g,sid):
+    for cs in g.iter("ComplicationSlot"):
+        if cs.get("slotId")==sid:
+            for c in cs.findall("Complication"):
+                if c.get("type")=="EMPTY": return ET.tostring(c, encoding="unicode")
+    return ""
+want={"0":"DAY_OF_WEEK_F","1":"WEATHER.HOURS","2":"STEP_COUNT","3":"BATTERY_PERCENT","7":"tile_wallet"}
+miss=[f"{t}{sid}" for g,t in ((A,"A"),(Cc,"C")) for sid,tok in want.items() if tok not in empty_src(g,sid)]
+chk("section 4 defaults preserved as each slot's EMPTY rendering", not miss, str(miss))
+chk("section 7 single-value fallback at y 262 (A) and y 284 (C)",
+    'y="262" width="480" height="40"' in src and 'y="284" width="480" height="40"' in src)
+chk("RANGED_VALUE arc fill guards against a zero range",
+    src.count("RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]) == 0 ? 0")==2,
+    str(src.count("RANGED_VALUE_MAX] - [COMPLICATION.RANGED_VALUE_MIN]) == 0 ? 0")))
+parent={c:p for p in root.iter() for c in p}
+def ancestors(e):
+    while e in parent: e=parent[e]; yield e
+taps=[e for e in root.iter() if e.findall("Launch")]
+stray=[f"{e.tag}/{e.get('name')}" for e in taps
+       if not any(a.tag=="ComplicationSlot" for a in ancestors(e))]
+chk(f"all {len(taps)} tap targets sit inside the slot they belong to", not stray, str(stray))
 
 # ---------- palette: every colour driven by [CONFIGURATION.style] ----------
 PAL={"bg":"0A0A0B 060806 0B0A08 111110 000000",
@@ -279,7 +318,7 @@ nxf=len(root.findall(".//Transform"))
 geo=[t for t in root.iter("Transform") if "extractColorFromColors" not in (t.get("value") or "")]
 chk("every Transform is either a palette lookup or one of the five geometry ones",
     len(re.findall("extractColorFromColors", src))+len(geo)==nxf and
-    sorted(t.get("target") for t in geo)==["angle","angle","endAngle","endAngle","endAngle"],
+    sorted(t.get("target") for t in geo)==["angle","angle"]+["endAngle"]*5,
     f"{nxf} total, geometry {sorted(t.get('target') for t in geo)}")
 
 # ---------- palette ----------

@@ -151,6 +151,44 @@ always-on group. Curved text is `TextCircular`; the forecast reads native
 tintable glyphs. Tap targets are separate transparent parts, all at least
 44 x 44, so the full-face parts that carry curved text never capture a tap.
 
+### Slots
+
+All eight section 4 slots are `ComplicationSlot`s in both layouts, reassignable
+from the watch face editor to anything the user has installed.
+
+Each slot's section 4 default is carried by its `EMPTY` complication block, so
+an unassigned slot renders exactly what the spec specifies — the day/date
+expression, the native three-hour weather strip, the steps and battery arcs,
+the wallet tile — and assigning a provider replaces it:
+
+| Slot | `EMPTY` (the section 4 default) | Also renders |
+| --- | --- | --- |
+| 0 top strip | `[DAY_OF_WEEK_F] [DAY]`, uppercase | `SHORT_TEXT` |
+| 1 forecast | native `[WEATHER.HOURS.1..3]` strip | `SHORT_TEXT` — section 7's single value + label at y 262 (A) / y 284 (C) |
+| 2 steps | arc from `[STEP_PERCENT]` + curved readout | `RANGED_VALUE` (arc follows the complication's range), `SHORT_TEXT` (track only) |
+| 3 battery | arc from `[BATTERY_PERCENT]`, amber when low | `RANGED_VALUE`, `SHORT_TEXT` |
+| 4 alarm | — | `SHORT_TEXT` |
+| 5 timer | — | `SHORT_TEXT` |
+| 6 minor row | — (defaults to the `SUNRISE_SUNSET` system provider) | `SHORT_TEXT` |
+| 7 icon tile | wallet glyph, taps the configured URI | `MONOCHROMATIC_IMAGE`, `SMALL_IMAGE` |
+
+Slot 6 is the only section 4 default with a matching system data source, so it
+is the only slot carrying a `DefaultProviderPolicy`. The others start empty on
+purpose — that is what makes their built-in default render.
+
+`RANGED_VALUE` arcs fill on
+`clamp((VALUE - MIN) / (MAX - MIN), 0, 1)` with a zero-range guard.
+
+Tap targets live inside the slot they belong to, so an assigned complication
+uses its provider's own tap action instead of the built-in launch.
+
+**Unverified:** that a `Complication` of `type="EMPTY"` renders its content
+when no provider is assigned. The type is in the documented enum and the
+element takes inner content, but no example in the reference shows content
+under `EMPTY`. If it turns out not to render, each slot needs a
+`DefaultProviderPolicy` instead and the built-in defaults are lost for
+slots 0-3 and 7. The validator and a first install settle it.
+
 ### Palette (`style`) and numerals
 
 Five palettes from section 3 — Swiss, Mission, Editorial, Bauhaus, Stealth —
@@ -217,7 +255,7 @@ rendered by Wear OS, not by the face, and needs nothing in `watchface.xml`.
 
 ```bash
 python3 tools/render_preview.py      # preview.png + all 13 editor option icons
-python3 tools/verify.py              # 62 structural checks, exits non-zero on failure
+python3 tools/verify.py              # 68 structural checks, exits non-zero on failure
 ```
 
 ## Alternative: Watch Face Studio
