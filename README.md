@@ -47,8 +47,28 @@ Keep all coordinates in the 450 x 450 space and one file covers both sizes.
 
 ## Build
 
-Requirements: JDK 17, Android SDK platform 34 + build-tools, `adb`.
-Android Studio installs all of them.
+Two routes produce the same APK. Both sign with `~/.android/debug.keystore`,
+so an APK from either updates over one from the other without an uninstall.
+
+**Without Android Studio** — a Watch Face Format face is resource-only, so the
+legacy `aapt` that Debian/Ubuntu package is enough:
+
+```bash
+sudo apt-get install aapt apksigner zipalign android-sdk-platform-23
+./tools/build_apk.sh
+# -> build/watchface-debug.apk
+```
+
+The script reads `applicationId`, `minSdk`, `targetSdk`, `versionCode` and
+`versionName` from `watchface/build.gradle.kts` so there is one source of
+truth, injects the package name into a scratch copy of the manifest the way AGP
+does, packages with `--no-crunch` so the alpha-mask PNGs are stored untouched,
+zipaligns, signs, and verifies. `res/raw/watchface.xml` lands in the APK
+byte-identical to the source. The API-23 `android.jar` is only used to
+resolve `android:` attribute ids — every attribute in the manifest predates
+API 23, and the sdk versions are stamped from the flags.
+
+**With Android Studio** — JDK 17, Android SDK platform 34 + build-tools:
 
 ```bash
 ./gradlew :watchface:assembleDebug
@@ -75,7 +95,7 @@ adb pair <watch-ip>:<pairing-port> <6-digit-code>
 # which is NOT the pairing port)
 adb connect <watch-ip>:<port>
 
-adb install -r watchface/build/outputs/apk/debug/watchface-debug.apk
+adb install -r build/watchface-debug.apk        # or watchface/build/outputs/apk/debug/…
 ```
 
 Activate it by long-pressing the current face and picking it from the list, or
