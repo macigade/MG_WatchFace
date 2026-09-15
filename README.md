@@ -188,6 +188,30 @@ The platform behaviour was followed in each case:
 | "no arc-text primitive", use Watch Face Studio | `TextCircular` draws text on an arc | pure WFF, no WFS |
 | "no standard WFF forecast data source" | WFF 2 has 8 h hourly weather | native `[WEATHER.HOURS.*]` |
 | `format.version = 2` | colours are only transformable from 4 | **version 4**, so five palettes need one set of elements instead of five copies |
+| bezel select state (section 9) | no rotary/bezel/focus data source, no interaction element beyond `Launch`; and the Watch 7 has no rotating bezel | **not built** — see below |
+
+## Bezel select is not buildable
+
+Section 2's `Bezel focus sector` row and section 9's **Bezel select** state are the
+one part of the spec that cannot be built in Watch Face Format, for two separate
+reasons:
+
+1. **No input.** The complete WFF element index carries exactly two interaction
+   elements — `Launch` (tap, which only starts an app) and `Gyro` (accelerometer
+   parallax). There is no rotary, bezel, crown, focus, selection or editor-state
+   element, no such data source in `SourceType`, and nothing in the version 2-5
+   release notes. A watch face cannot read the bezel, and it has no way to hold a
+   "currently selected slot" value between renders.
+2. **No bezel.** The Galaxy Watch 7 does not have a rotating bezel. The Watch 6
+   Classic was the last model with one; the Watch 7 has a capacitive touch bezel
+   used for scrolling system UI, which is not exposed to watch faces either.
+
+The 16 degree accent sector could be drawn, but nothing can drive which slot it
+points at, so it is left unbuilt rather than shipped as decoration.
+
+What the platform gives instead: while a user edits the watch face, the system
+draws its own highlight around the complication slot being assigned. That is
+rendered by Wear OS, not by the face, and needs nothing in `watchface.xml`.
 
 ## Regenerating the assets
 
