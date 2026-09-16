@@ -260,9 +260,16 @@ reasons:
    element, no such data source in `SourceType`, and nothing in the version 2-5
    release notes. A watch face cannot read the bezel, and it has no way to hold a
    "currently selected slot" value between renders.
-2. **No bezel.** The Galaxy Watch 7 does not have a rotating bezel. The Watch 6
-   Classic was the last model with one; the Watch 7 has a capacitive touch bezel
-   used for scrolling system UI, which is not exposed to watch faces either.
+2. **The touch bezel changes nothing.** The Watch 7 has no rotating bezel
+   (the Watch 6 Classic was the last), but it does have a capacitive touch
+   bezel — a circular touch zone at the edge of the screen. Wear OS treats it
+   as a *rotary input source*, identical to a physical bezel or the rotating
+   side button, and rotary events are delivered to the focused view of the
+   foreground activity. A Watch Face Format face has no view and no code, so
+   there is nothing for the event to reach; on the watch face screen the
+   system consumes it itself (tiles, notifications). And even if it arrived,
+   a face has no way to hold "slot 3 is selected" between renders — every
+   frame is a pure function of data sources and configuration.
 
 The 16 degree accent sector could be drawn, but nothing can drive which slot it
 points at, so it is left unbuilt rather than shipped as decoration.
